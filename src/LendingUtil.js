@@ -95,6 +95,7 @@ export const retrieveClaimable = async(owner) => {
         gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed_not: 0 }) {
         gotchi {
           id
+          name
         }
         completed
         upfrontCost
@@ -104,6 +105,8 @@ export const retrieveClaimable = async(owner) => {
         lastClaimed
         rentDuration
         whitelistId
+        borrower
+        period
       }}`
     }
   );

@@ -56,8 +56,13 @@ class BulkClaimEnd extends Component {
         parseInt(g),
       );
 
+      // diamondContractWithSigner.claimAndEndGotchiLending(
+      //   parseInt(g)
+      // );
+
       diamondContractWithSigner.claimAndEndGotchiLending(
-        parseInt(g)
+        parseInt(g),
+        {gasPrice: 45000000000, gasLimit: 300000 }
       );
     });
   }
@@ -76,16 +81,23 @@ class BulkClaimEnd extends Component {
             </a>
           )
         },
-        { field: 'upfrontCost', headerName: 'Upfront GHST', width: 240 },
-        { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 240 },
-        { field: 'whitelistId', headerName: 'Whitelist ID', width: 240 },
-        { field: 'lastClaimed', headerName: 'Last Claimed', width: 240 },
-        { field: 'completed', headerName: 'Completed', width: 240 },
+        { field: 'name', headerName: 'Name', width: 180 },
+        { field: 'upfrontCost', headerName: 'Upfront GHST', width: 180 },
+        { field: 'endable', headerName: 'Rental Endable', width: 240 },
+        { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 180 },
+        { field: 'whitelistId', headerName: 'Whitelist ID', width: 180 },
+        { field: 'lastClaimed', headerName: 'Last Claimed', width: 180 },
+        { field: 'lastClaimedRelative', headerName: 'Last Claimed', width: 180 },
+        { field: 'borrower', headerName: 'Renter', width: 480 },
       ];
 
       let rows = [];
       this.state.claimEndableGotchis.map((g) => {
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow() });
+        let endable = false;
+        if ((moment().unix() - g.timeAgreed) > g.period) {
+          endable = true;
+        }
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable });
       });
 
       console.log(rows);
