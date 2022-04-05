@@ -115,3 +115,65 @@ export const retrieveClaimable = async(owner) => {
 
   return rentals.data.data.gotchiLendings;
 };
+
+export const listingPerformance = async(listingId) => {
+  const performance = await axios.post(
+    'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
+    {
+      query: `{
+        gotchiLendings(where: {id: ${listingId}}) {
+          id
+          gotchiId
+          lender {
+            id
+          }
+          borrower {
+            id
+          }
+          thirdPartyAddress {
+            id
+          }
+          claimedFUD
+          claimedFOMO
+          claimedALPHA
+          claimedKEK
+          startTimestamp
+          endTimestamp
+        }
+      }`
+    }
+  );
+
+  return performance.data.data.gotchiLendings;
+};
+
+export const renterPerformance = async(borrower) => {
+  const performance = await axios.post(
+    'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
+    {
+      query: `{
+        gotchiLendings(where: {borrower: "${borrower.toLowerCase()}"}) {
+          id
+          gotchiId
+          lender {
+            id
+          }
+          borrower {
+            id
+          }
+          thirdPartyAddress {
+            id
+          }
+          claimedFUD
+          claimedFOMO
+          claimedALPHA
+          claimedKEK
+          startTimestamp
+          endTimestamp
+        }
+      }`
+    }
+  );
+
+  return performance.data.data.gotchiLendings;
+};

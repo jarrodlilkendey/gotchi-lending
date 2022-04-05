@@ -81,6 +81,16 @@ class BulkClaimEnd extends Component {
             </a>
           )
         },
+        {
+          field: 'performanceLink',
+          headerName: 'Performance',
+          width: 120,
+          renderCell: (params: GridCellParams) => (
+            <a href={`${params.value}`} target="_blank">
+              Performance
+            </a>
+          )
+        },
         { field: 'name', headerName: 'Name', width: 180 },
         { field: 'upfrontCost', headerName: 'Upfront GHST', width: 180 },
         { field: 'endable', headerName: 'Rental Endable', width: 240 },
@@ -97,7 +107,7 @@ class BulkClaimEnd extends Component {
         if ((moment().unix() - g.timeAgreed) > g.period) {
           endable = true;
         }
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable });
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}` });
       });
 
       console.log(rows);

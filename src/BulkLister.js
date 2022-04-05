@@ -48,7 +48,7 @@ class BulkLister extends Component {
   createRentals() {
     console.log('createRentals', this.state.selectedGotchis);
     let lendingConfig = {
-      initialCost: "1.0",
+      initialCost: "0.9",
       period: 3600 * 12, // 1hr = 3600 seconds
       // period: 3600 * 6, // 1hr = 3600 seconds
       // period: 3600 * 6, // 1hr = 3600 seconds
