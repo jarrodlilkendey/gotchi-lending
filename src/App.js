@@ -7,6 +7,7 @@ import BulkLister from './BulkLister';
 import BulkCancel from './BulkCancel';
 import BulkClaimEnd from './BulkClaimEnd';
 import RenterPerformance from './RenterPerformance';
+import GuildLeaderboard from './GuildLeaderboard';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <li><Link to={"/bulklend"}>Bulk Lending</Link></li>
           <li><Link to={"/bulkcancel"}>Bulk Cancel Lending</Link></li>
           <li><Link to={"/bulkend"}>Bulk Claim End</Link></li>
+          <li><Link to={"/leaderboard"}>Guild Leaderboard</Link></li>
         </ul>
       </div>
       <div>
@@ -24,6 +26,7 @@ function App() {
           <Route path="/bulkcancel" element={<BulkCancel />} />
           <Route path="/bulkend" element={<BulkClaimEnd />} />
           <Route path="/performance" element={<RenterPerformance />} />
+          <Route path="/leaderboard" element={<GuildLeaderboard />} />
         </Routes>
       </div>
     </div>

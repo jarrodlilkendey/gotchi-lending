@@ -177,3 +177,38 @@ export const renterPerformance = async(borrower) => {
 
   return performance.data.data.gotchiLendings;
 };
+
+export const leaderboard = async(thirdPartyAddress, startBlock, endBlock) => {
+  const performance = await axios.post(
+    'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
+    {
+      query: `{
+        gotchiLendings(first: 1000, start: 0, where: {thirdPartyAddress: "${thirdPartyAddress.toLowerCase()}", started: true}, orderBy: startTimestamp, orderDirection: desc) {
+          id
+          gotchiId
+          lender {
+            id
+          }
+          borrower {
+            id
+          }
+          thirdPartyAddress {
+            id
+          }
+          claimedFUD
+          claimedFOMO
+          claimedALPHA
+          claimedKEK
+          startTimestamp
+          endTimestamp
+          splitOwner
+          splitBorrower
+          splitOther
+          started
+        }
+      }`
+    }
+  );
+
+  return performance.data.data.gotchiLendings;
+};
