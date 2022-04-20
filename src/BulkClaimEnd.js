@@ -25,8 +25,6 @@ class BulkClaimEnd extends Component {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamond, provider);
 
-    console.log(diamondContract);
-
     retrieveClaimable(window.ethereum.selectedAddress)
       .then((claimEndableGotchis) => {
         console.log('claimEndableGotchis', claimEndableGotchis)
@@ -34,16 +32,8 @@ class BulkClaimEnd extends Component {
       })
   }
 
-  // async getUnlistedGotchis(provider, diamondContract) {
-  //   console.log(provider, diamondContract, window.ethereum);
-  // }
-
   handleChange(key, value) {
     this.setState({ [key]: value });
-  }
-
-  renderUnrentedGotchis() {
-
   }
 
   claimEndRentals() {
@@ -56,13 +46,10 @@ class BulkClaimEnd extends Component {
         parseInt(g),
       );
 
-      // diamondContractWithSigner.claimAndEndGotchiLending(
-      //   parseInt(g)
-      // );
-
       diamondContractWithSigner.claimAndEndGotchiLending(
         parseInt(g),
-        {gasPrice: 45000000000, gasLimit: 300000 }
+        // {gasPrice: 35000000000, gasLimit: 350000 }
+        // {gasPrice: 45000000000, gasLimit: 300000 }
       );
     });
   }
@@ -92,9 +79,10 @@ class BulkClaimEnd extends Component {
           )
         },
         { field: 'name', headerName: 'Name', width: 180 },
-        { field: 'upfrontCost', headerName: 'Upfront GHST', width: 180 },
+        { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 180 },
         { field: 'endable', headerName: 'Rental Endable', width: 240 },
         { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 180 },
+        { field: 'timeAgreedRelative', headerName: 'Time Agreed', width: 180 },
         { field: 'whitelistId', headerName: 'Whitelist ID', width: 180 },
         { field: 'lastClaimed', headerName: 'Last Claimed', width: 180 },
         { field: 'lastClaimedRelative', headerName: 'Last Claimed', width: 180 },
@@ -107,15 +95,14 @@ class BulkClaimEnd extends Component {
         if ((moment().unix() - g.timeAgreed) > g.period) {
           endable = true;
         }
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}` });
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}`, timeAgreedRelative: moment.unix(g.timeAgreed).fromNow(), upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
       });
-
-      console.log(rows);
 
       return (
         <div>
           <div>
             <h2>Claim Endable Rental Gotchis</h2>
+            <p>Note: Sometimes the subgraph provides out of date data on claim endable listings and listings that have already ended are shown in this list.</p>
           </div>
           <p><button onClick={() => this.claimEndRentals()}>Claim End {this.state.selectedGotchis.length} Gotchis</button></p>
           <div style={{ height: '1080px', width: '100%' }}>
@@ -137,7 +124,6 @@ class BulkClaimEnd extends Component {
     return(
       <div>
         <h1>Bulk Claim Endooor</h1>
-
         {this.renderClaimEndableGotchis()}
       </div>
     )

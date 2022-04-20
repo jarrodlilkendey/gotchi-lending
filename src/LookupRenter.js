@@ -165,7 +165,7 @@ class RenterPerformance extends Component {
   render() {
     return(
       <div>
-        <h1>Renter Performance</h1>
+        <h1>Lookup Renter</h1>
         {this.state.renter &&
           <p>Renters Gotchis Link: <a href={`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`} target="_blank">{`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`}</a></p>
         }

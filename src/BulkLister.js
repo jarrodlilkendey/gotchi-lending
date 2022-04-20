@@ -48,12 +48,27 @@ class BulkLister extends Component {
   createRentals() {
     console.log('createRentals', this.state.selectedGotchis);
     let lendingConfig = {
-      initialCost: "0.9",
-      period: 3600 * 12, // 1hr = 3600 seconds
+      // initialCost: "1.9",
+      initialCost: "0.5",
+      // initialCost: "1.00",
+      // initialCost: "1.5",
+      // initialCost: "0.1",
+      // initialCost: "0.0",
+      // initialCost: "0.8",
+      // period: 3600 * 4, // 1hr = 3600 seconds
+      // period: 3600 * 12, // 1hr = 3600 seconds
       // period: 3600 * 6, // 1hr = 3600 seconds
-      // period: 3600 * 6, // 1hr = 3600 seconds
-      revenueSplit: [4, 95, 1],
-      // revenueSplit: [9, 90, 1],
+      // period: 3600 * 12, // 1hr = 3600 seconds
+      period: 3600 * 24, // 1hr = 3600 seconds
+      // period: 3600 * 10, // 1hr = 3600 seconds
+      // period: 3600 * 24 * 3, // 1hr = 3600 seconds
+      // revenueSplit: [4, 95, 1],
+      // revenueSplit: [39, 60, 1],
+      // revenueSplit: [25, 70, 5],
+      // revenueSplit: [30, 65, 5],
+      revenueSplit: [29, 70, 1],
+      // revenueSplit: [0, 100, 0],
+      // revenueSplit: [35, 60, 5],
       // revenueSplit: [40, 50, 10],
       // revenueSplit: [23, 70, 7],
       originalOwner: window.ethereum.selectedAddress,
@@ -63,6 +78,8 @@ class BulkLister extends Component {
       // whitelistId: 1556,
       whitelistId: 0,
       // whitelistId: 1983,
+      // whitelistId: 3444,
+      // whitelistId: 3540,
       revenueTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C']
     };
 
@@ -89,7 +106,8 @@ class BulkLister extends Component {
         lendingConfig.thirdParty,
         lendingConfig.whitelistId,
         lendingConfig.revenueTokens,
-        { gasPrice: 45000000000, gasLimit: 500438 }
+        // { gasPrice: 35000000000, gasLimit: 500438 }
+        // { gasPrice: 45000000000, gasLimit: 500438 }
       );
     });
   }

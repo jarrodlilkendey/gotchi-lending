@@ -45,7 +45,8 @@ export const getUnlentGotchis = async(owner) => {
 
 export const retrieveOwnedRentalAavegotchis = async(owner) => {
   const rentals = await axios.post(
-    'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
+    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
         gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false }) {
@@ -63,7 +64,8 @@ export const retrieveOwnedRentalAavegotchis = async(owner) => {
 
 export const retrieveOwnedUncancelledRentalAavegotchis = async(owner) => {
   const rentals = await axios.post(
-    'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
+    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
         gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed: 0 }) {
@@ -89,7 +91,8 @@ export const retrieveOwnedUncancelledRentalAavegotchis = async(owner) => {
 
 export const retrieveClaimable = async(owner) => {
   const rentals = await axios.post(
-    'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
+    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
         gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed_not: 0 }) {
@@ -178,7 +181,7 @@ export const renterPerformance = async(borrower) => {
   return performance.data.data.gotchiLendings;
 };
 
-export const leaderboard = async(thirdPartyAddress, startBlock, endBlock) => {
+export const leaderboard = async(thirdPartyAddress) => {
   const performance = await axios.post(
     'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
     {
@@ -211,4 +214,85 @@ export const leaderboard = async(thirdPartyAddress, startBlock, endBlock) => {
   );
 
   return performance.data.data.gotchiLendings;
+};
+
+export const getFreeLendingActivityQuery = (skip) => {
+  return `{
+    gotchiLendings(first: 1000, skip: ${skip}, where:{ timeAgreed_not: 0, upfrontCost: 0 }, orderBy:timeAgreed, orderDirection:desc) {
+    gotchi {
+      id
+      name
+    }
+    completed
+    upfrontCost
+    timeCreated
+    timeAgreed
+    id
+    lastClaimed
+    rentDuration
+    whitelistId
+    borrower
+    period
+  }}`;
+}
+
+export const getUpfrontLendingActivityQuery = (skip) => {
+  return `{
+    gotchiLendings(first: 1000, skip: ${skip}, where:{ timeAgreed_not: 0, upfrontCost_not: 0 }, orderBy:timeAgreed, orderDirection:desc) {
+    gotchi {
+      id
+      name
+    }
+    completed
+    upfrontCost
+    timeCreated
+    timeAgreed
+    id
+    lastClaimed
+    rentDuration
+    whitelistId
+    borrower
+    period
+    splitBorrower
+    splitOwner
+    splitOther
+  }}`;
+}
+
+export const getFreeLendingActivity = async() => {
+  let lendingActivity = [];
+
+  for (var i = 0; i < 5000; i+=1000) {
+    const rentals = await axios.post(
+      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      {
+        query: getFreeLendingActivityQuery(i)
+      }
+    );
+
+    rentals.data.data.gotchiLendings.map((r) => {
+      lendingActivity.push(r);
+    });
+  }
+
+  return lendingActivity;
+};
+
+export const getUpfrontLendingActivity = async() => {
+  let lendingActivity = [];
+
+  for (var i = 0; i < 5000; i+=1000) {
+    const rentals = await axios.post(
+      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      {
+        query: getUpfrontLendingActivityQuery(i)
+      }
+    );
+
+    rentals.data.data.gotchiLendings.map((r) => {
+      lendingActivity.push(r);
+    });
+  }
+
+  return lendingActivity;
 };

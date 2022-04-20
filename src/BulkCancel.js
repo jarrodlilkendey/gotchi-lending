@@ -34,16 +34,8 @@ class BulkCancel extends Component {
       })
   }
 
-  // async getUnlistedGotchis(provider, diamondContract) {
-  //   console.log(provider, diamondContract, window.ethereum);
-  // }
-
   handleChange(key, value) {
     this.setState({ [key]: value });
-  }
-
-  renderUnrentedGotchis() {
-
   }
 
   cancelRentals() {
@@ -76,14 +68,14 @@ class BulkCancel extends Component {
             </a>
           )
         },
-        { field: 'upfrontCost', headerName: 'Upfront GHST', width: 240 },
+        { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 240 },
         { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 240 },
         { field: 'whitelistId', headerName: 'Whitelist ID', width: 240 }
       ];
 
       let rows = [];
       this.state.uncancelledRentalGotchis.map((g) => {
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow() });
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
       });
 
       console.log(rows);
@@ -92,6 +84,7 @@ class BulkCancel extends Component {
         <div>
           <div>
             <h2>Uncancelled Rental Gotchis</h2>
+            <p>Note: Sometimes the subgraph provides out of date data on cancellable listings.</p>
           </div>
           <p><button onClick={() => this.cancelRentals()}>Cancel {this.state.selectedGotchis.length} Gotchis</button></p>
           <div style={{ height: '1080px', width: '100%' }}>

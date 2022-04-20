@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-size: 10pt;
 }
 
 .App-logo {
@@ -35,4 +36,102 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.my-nav .nav-link .active {
+  border-style: none;
+  color: white;
+}
+
+.my-nav .nav-item .active {
+  background:#242735;
+  color: white;
+  font-size: large;
+}
+
+.my-nav .nav-link {
+  border-style: none;
+  color: white;
+  font-size: large;
+}
+
+.my-nav .nav-tabs {
+  border-style: none;
+}
+
+.my-nav {
+  background: #11131b;
+}
+
+.my-nav img {
+  margin-right: 20px;
+}
+
+body {
+  background:#242735 !important;
+}
+
+.bodycontent, .bodycontent h1,  .bodycontent h2, .bodycontent h3, .bodycontent h4, .bodycontent h5 {
+  color:white;
+  padding:2px;
+}
+
+.interval-data {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.interval-data .nav-link.active {
+  background-color: #242735;
+  color: white;
+}
+
+.interval-data .nav-link {
+  background-color: #242735;
+  color: grey;
+}
+
+.data-row {
+  /* border: 1px solid grey; */
+  border-color:grey;
+  border-style:solid;
+  border-width: 1px 1px 0px 1px;
+}
+
+.bodycontent {
+  color: white;
+}
+
+body p {
+  color: white;
+}
+
+.rentalListings .card {
+  border-color:grey;
+  border-style:solid;
+  border-width: 1px 1px 1px 1px;
+  background:#242735;
+  margin-top: 5px;
+}
+
+.rentalListings .card-title {
+  color:white;
+}
+
+.rent-btn {
+  margin-top: 3px;
+  background-color: #FA34F3;
+  color: white;
+  width: 70%;
+}
+
+.MuiDataGrid-columnHeaders	{
+  background-color: black;
+  color: white;
+}
+
+.MuiDataGrid-cell {
+  background-color: #EAECEE;
+  color: black;
 }
