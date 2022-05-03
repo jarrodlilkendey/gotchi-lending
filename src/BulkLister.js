@@ -49,36 +49,41 @@ class BulkLister extends Component {
     console.log('createRentals', this.state.selectedGotchis);
     let lendingConfig = {
       // initialCost: "1.9",
-      initialCost: "0.5",
-      // initialCost: "1.00",
+      // initialCost: "0.5",
+      // initialCost: "0.0",
+      // initialCost: "1.5",
       // initialCost: "1.5",
       // initialCost: "0.1",
-      // initialCost: "0.0",
+      initialCost: "0.0",
       // initialCost: "0.8",
       // period: 3600 * 4, // 1hr = 3600 seconds
       // period: 3600 * 12, // 1hr = 3600 seconds
       // period: 3600 * 6, // 1hr = 3600 seconds
       // period: 3600 * 12, // 1hr = 3600 seconds
-      period: 3600 * 24, // 1hr = 3600 seconds
+      // period: 3600 * 6, // 1hr = 3600 seconds
       // period: 3600 * 10, // 1hr = 3600 seconds
-      // period: 3600 * 24 * 3, // 1hr = 3600 seconds
+      period: 3600 * 6, // 1hr = 3600 seconds
+      // period: 3600 * 6, // 1hr = 3600 seconds
       // revenueSplit: [4, 95, 1],
       // revenueSplit: [39, 60, 1],
-      // revenueSplit: [25, 70, 5],
-      // revenueSplit: [30, 65, 5],
-      revenueSplit: [29, 70, 1],
       // revenueSplit: [0, 100, 0],
-      // revenueSplit: [35, 60, 5],
+      // revenueSplit: [20, 75, 5],
+      // revenueSplit: [20, 75, 5],
+      // revenueSplit: [29, 70, 1],
+      revenueSplit: [35, 60, 5],
+      // revenueSplit: [30, 65, 5],
       // revenueSplit: [40, 50, 10],
-      // revenueSplit: [23, 70, 7],
+      // revenueSplit: [30, 70, 0],
+      // revenueSplit: [25, 70, 5],
       originalOwner: window.ethereum.selectedAddress,
       thirdParty: '0xE237122dbCA1001A9A3c1aB42CB8AE0c7bffc338',
       // thirdParty: '0x0000000000000000000000000000000000000000',
       // thirdParty: '0xADEe3f4863c1a31a5Cd422c8C6FAE39c2ac15447',
       // whitelistId: 1556,
-      whitelistId: 0,
-      // whitelistId: 1983,
       // whitelistId: 3444,
+      // whitelistId: 1983,
+      whitelistId: 3444,
+      // whitelistId: 0,
       // whitelistId: 3540,
       revenueTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C']
     };

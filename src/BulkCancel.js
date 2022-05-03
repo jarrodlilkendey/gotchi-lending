@@ -54,7 +54,7 @@ class BulkCancel extends Component {
     });
   }
 
-  renderCompletedUncancelledGotchis() {
+  renderCancellableGotchis() {
     if (this.state.uncancelledRentalGotchis && this.state.uncancelledRentalGotchis.length > 0) {
       let columns = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -99,6 +99,10 @@ class BulkCancel extends Component {
           </div>
         </div>
       );
+    } else if (this.state.uncancelledRentalGotchis.length == 0) {
+      return(
+        <p>You have no Aavegotchi rentals that can be cancelled.</p>
+      );
     }
   }
 
@@ -107,7 +111,7 @@ class BulkCancel extends Component {
       <div>
         <h1>Bulk Cancelooor</h1>
 
-        {this.renderCompletedUncancelledGotchis()}
+        {this.renderCancellableGotchis()}
       </div>
     )
   }

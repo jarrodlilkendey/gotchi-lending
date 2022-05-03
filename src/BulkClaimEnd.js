@@ -117,6 +117,10 @@ class BulkClaimEnd extends Component {
           </div>
         </div>
       );
+    } else if (this.state.claimEndableGotchis.length == 0) {
+      return(
+        <p>You have no Aavegotchi rentals that can be claimed.</p>
+      );
     }
   }
 
