@@ -32,15 +32,19 @@ export default function Header() {
              </li>*/}
 
              <li className="nav-item">
+              <NavLink to="/activity" className={isActive(location, '/activity')}>RECENT LENDING ACTIVITY</NavLink>
+             </li>
+
+             <li className="nav-item">
+              <NavLink to="/borrower" className={isActive(location, '/borrower')}>BORROWER ANALYTICS</NavLink>
+             </li>
+
+             <li className="nav-item">
               <NavLink to="/bulkcancel" className={isActive(location, '/bulkcancel')}>BULK CANCELOOOR</NavLink>
              </li>
 
              <li className="nav-item">
               <NavLink to="/bulkend" className={isActive(location, '/bulkend')}>BULK CLAIM ENDOOOR</NavLink>
-             </li>
-
-             <li className="nav-item">
-              <NavLink to="/activity" className={isActive(location, '/activity')}>RECENT LENDING ACTIVITY</NavLink>
              </li>
 
              {/*}

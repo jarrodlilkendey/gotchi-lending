@@ -9,7 +9,7 @@ import BulkLister from './BulkLister';
 import BulkCancel from './BulkCancel';
 import BulkClaimEnd from './BulkClaimEnd';
 import RenterPerformance from './RenterPerformance';
-import LookupRenter from './LookupRenter';
+import LookupBorrower from './LookupBorrower';
 import RecentLendingActivity from './RecentLendingActivity';
 
 import Header from './Header';
@@ -84,7 +84,7 @@ class App extends Component {
               <Route path="/bulkcancel" element={<BulkCancel />} />
               <Route path="/bulkend" element={<BulkClaimEnd />} />
               <Route path="/performance" element={<RenterPerformance />} />
-              <Route path="/lookuprenter" element={<LookupRenter />} />
+              <Route path="/borrower" element={<LookupBorrower />} />
               <Route path="/activity" element={<RecentLendingActivity />} />
             </Routes>
           </div>
