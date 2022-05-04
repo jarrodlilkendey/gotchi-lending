@@ -5,12 +5,13 @@ import './App.css';
 
 import { Routes, Route, Link } from "react-router-dom";
 
-import BulkLister from './BulkLister';
+import BulkLender from './BulkLender';
 import BulkCancel from './BulkCancel';
 import BulkClaimEnd from './BulkClaimEnd';
 import RenterPerformance from './RenterPerformance';
 import LookupBorrower from './LookupBorrower';
 import RecentLendingActivity from './RecentLendingActivity';
+import MyLendingRevenue from './MyLendingRevenue';
 
 import Header from './Header';
 import Home from './Home';
@@ -80,12 +81,13 @@ class App extends Component {
           <div>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/bulklend" element={<BulkLister />} />
+              <Route path="/bulklend" element={<BulkLender />} />
               <Route path="/bulkcancel" element={<BulkCancel />} />
               <Route path="/bulkend" element={<BulkClaimEnd />} />
               <Route path="/performance" element={<RenterPerformance />} />
               <Route path="/borrower" element={<LookupBorrower />} />
               <Route path="/activity" element={<RecentLendingActivity />} />
+              <Route path="/revenue" element={<MyLendingRevenue />} />
             </Routes>
           </div>
         </div>
