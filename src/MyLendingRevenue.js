@@ -27,17 +27,15 @@ class MyLendingRevenue extends Component {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamond, provider);
 
-    myCompletedRentals('0x26cf02F892B04aF4Cf350539CE2C77FCF79Ec172')
+    myCompletedRentals(window.ethereum.selectedAddress)
       .then((myRentals) => {
-        console.log('myRentals', myRentals);
-
         let myRentalsChartData = {
           fud: { data: [], name: 'FUD', color: 'green', type: 'column' },
           fomo: { data: [], name: 'FOMO', color: 'red', type: 'column' },
           alpha: { data: [], name: 'ALPHA', color: '#5CF1E8', type: 'column'  },
           kek: { data: [], name: 'KEK', color: '#6B03F9', type: 'column' },
           ghst: { data: [], name: 'GHST', color: '#F000FF', type: 'column' },
-          rentals: { data: [], name: 'Rentals', color: 'black', type: 'line', yAxis: 1 },
+          rentals: { data: [], name: 'Rentals Completed', color: 'black', type: 'line', yAxis: 1 },
         };
 
         let fud = {};
@@ -50,9 +48,6 @@ class MyLendingRevenue extends Component {
         myRentals.map((r, i) => {
           let d = new Date(parseInt(r.endTimestamp) * 1000);
           d.setHours(0, 0, 0, 0);
-
-          if (i == 0)
-            console.log('chart', d);
 
           let key = d.valueOf().toString();
           let ownersFud = (r.splitOwner / 100) * parseFloat(ethers.utils.formatEther(r.claimedFUD));
@@ -131,15 +126,12 @@ class MyLendingRevenue extends Component {
         myRentalsChartData.ghst.data = _.orderBy(ghstData, ['x'], ['asc']);
         myRentalsChartData.rentals.data = _.orderBy(rentalsData, ['x'], ['asc']);
 
-        console.log('myRentalsChartData', myRentalsChartData);
-
         this.setState({myRentals, myRentalsChartData});
       });
   }
 
   renderChart() {
     if (this.state.myRentalsChartData) {
-      console.log('timezone', moment_tz.tz.guess());
       const chartOptions = {
         time: {
           timezone: moment_tz.tz.guess(),
