@@ -216,6 +216,59 @@ export const leaderboard = async(thirdPartyAddress) => {
   return performance.data.data.gotchiLendings;
 };
 
+const myCompletedRentalsQuery = (owner, i) => {
+  let query = `{
+    gotchiLendings(first:1000, skip: ${i}, where: {originalOwner: "${owner.toLowerCase()}", cancelled: false, completed: true}) {
+      id
+      gotchiId
+      lender {
+        id
+      }
+      borrower {
+        id
+      }
+      thirdPartyAddress {
+        id
+      }
+      claimedFUD
+      claimedFOMO
+      claimedALPHA
+      claimedKEK
+      startTimestamp
+      endTimestamp
+      splitOwner
+      splitBorrower
+      splitOther
+      upfrontCost
+    }
+  }`;
+
+  return query;
+};
+
+export const myCompletedRentals = async(owner) => {
+  let rentals = [];
+
+  for (var i = 0; i < 5000; i+=1000) {
+    const performance = await axios.post(
+      'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
+      {
+        query: myCompletedRentalsQuery(owner, i)
+      }
+    );
+
+    performance.data.data.gotchiLendings.map((r) => {
+      rentals.push(r);
+    });
+
+    if (performance.data.data.gotchiLendings.length != 1000) {
+      i = 5000;
+    }
+  }
+
+  return rentals;
+};
+
 export const getFreeLendingActivityQuery = (skip) => {
   return `{
     gotchiLendings(first: 1000, skip: ${skip}, where:{ timeAgreed_not: 0, upfrontCost: 0 }, orderBy:timeAgreed, orderDirection:desc) {
