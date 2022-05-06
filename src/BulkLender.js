@@ -28,7 +28,8 @@ class BulkLender extends Component {
       alphaEnabled: true,
       kekEnabled: true,
       sharedTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C'],
-      isValid: true
+      isValid: true,
+      gasPriceGwei: 35
     };
   }
 
@@ -129,7 +130,7 @@ class BulkLender extends Component {
       period: 3600 * this.state.periodInHours, // 1hr = 3600 seconds
       revenueSplit: [this.state.ownerSplit, this.state.borrowerSplit, this.state.otherSplit],
       originalOwner: window.ethereum.selectedAddress,
-      thirdParty: this.state.otherAddress=='' ? '0x0000000000000000000000000000000000000000' : this.state.otherAddress,    // if otherAddres 
+      thirdParty: this.state.otherAddress=='' ? '0x0000000000000000000000000000000000000000' : this.state.otherAddress,    // if otherAddres
       whitelistId: this.state.whitelistId,
       revenueTokens: this.state.sharedTokens
     };
@@ -199,7 +200,10 @@ class BulkLender extends Component {
         lendingConfig.thirdParty,
         lendingConfig.whitelistId,
         lendingConfig.revenueTokens,
-        // { gasPrice: 35000000000, gasLimit: 500438 }
+        {
+          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"), //35000000000,
+          gasLimit: 500438
+        }
         // { gasPrice: 45000000000, gasLimit: 500438 }
       );
     });
@@ -262,9 +266,13 @@ class BulkLender extends Component {
               </div>
             </div>
           </div>
-          <div class="col-2">
+          <div class="col-1">
             <label for="whitelistId" className="col col-form-label">Whitelist ID</label>
             <input type="number" min="0" step="1" className="form-control" id="whitelistId" placeholder="Whitelist ID" value={this.state.whitelistId} onChange={(event) => this.onIntegerInputChange(event)} />
+          </div>
+          <div class="col-1">
+            <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
+            <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
           </div>
         </div>
         {this.state.otherSplit > 0 &&
