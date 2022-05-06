@@ -27,10 +27,6 @@ export default function Header() {
         </NavLink>
          <div className="collapse navbar-collapse" id="navbarNav">
            <ul className="nav nav-tabs">
-             {/*<li className="nav-item">
-              <NavLink to="/bulklend" className={isActive(location, '/bulklend')}>BULK LISTOOOR</NavLink>
-             </li>*/}
-
              <li className="nav-item">
               <NavLink to="/activity" className={isActive(location, '/activity')}>RECENT LENDING ACTIVITY</NavLink>
              </li>
@@ -39,6 +35,13 @@ export default function Header() {
               <NavLink to="/borrower" className={isActive(location, '/borrower')}>BORROWER ANALYTICS</NavLink>
              </li>
 
+             <li className="nav-item">
+              <NavLink to="/revenue" className={isActive(location, '/revenue')}>MY LENDING REVENUE</NavLink>
+             </li>
+
+             <li className="nav-item">
+              <NavLink to="/bulklend" className={isActive(location, '/bulklend')}>BULK LENDOOOR</NavLink>
+             </li>
              <li className="nav-item">
               <NavLink to="/bulkcancel" className={isActive(location, '/bulkcancel')}>BULK CANCELOOOR</NavLink>
              </li>
