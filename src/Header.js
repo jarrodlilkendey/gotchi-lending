@@ -49,16 +49,6 @@ export default function Header() {
              <li className="nav-item">
               <NavLink to="/bulkend" className={isActive(location, '/bulkend')}>BULK CLAIM ENDOOOR</NavLink>
              </li>
-
-             {/*}
-             <p><Link to={"/bulklend"}>Bulk Lending</Link></p>
-             <p><Link to={"/bulkcancel"}>Bulk Cancel Lending</Link></p>
-             <p><Link to={"/bulkend"}>Bulk Claim End</Link></p>
-             <p><Link to={"/lookuprenter"}>Lookup Renter</Link></p>
-             <p><Link to={"/activity"}>Recent Lending Activity</Link></p>
-             <p><Link to={"/activity"}>Lender Daily Revenue</Link></p>
-             <p><a href={"https://tools.wagmiwarriors.com/leaderboard"}>Guild Leaderboard</a></p>
-             */}
            </ul>
          </div>
          <div className="navbar-brand navbar-right">
