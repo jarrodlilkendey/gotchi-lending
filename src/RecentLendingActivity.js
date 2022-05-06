@@ -61,7 +61,7 @@ class RecentLendingActivity extends Component {
       let period = _.round(r.periodInHours, 1);
       let key = `${r.splitBorrower}-${ghst}-${period}`;
       if (!results.hasOwnProperty(key)) {
-        results[key] = { count: 0, splitBorrower: r.splitBorrower, upfrontCostInGHST: ghst, periodInHours: period, id: key };
+        results[key] = { count: 1, splitBorrower: r.splitBorrower, upfrontCostInGHST: ghst, periodInHours: period, id: key };
       } else {
         results[key].count++;
       }
