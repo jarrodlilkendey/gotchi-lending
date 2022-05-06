@@ -6,16 +6,15 @@ class Home extends Component {
   render() {
     return(
       <div>
-        <h1>Welcome to Gotchi Lending .com</h1>
-        {/*
-        <p><Link to={"/bulklend"}>Bulk Lending</Link></p>
-        <p><Link to={"/bulkcancel"}>Bulk Cancel Lending</Link></p>
-        <p><Link to={"/bulkend"}>Bulk Claim End</Link></p>
-        <p><Link to={"/lookuprenter"}>Lookup Renter</Link></p>
-        <p><Link to={"/activity"}>Recent Lending Activity</Link></p>
-        <p><Link to={"/activity"}>Lender Daily Revenue</Link></p>
-        <p><a href={"https://tools.wagmiwarriors.com/leaderboard"}>Guild Leaderboard</a></p>
-        */}
+        <h1>Welcome to GotchiLending.com</h1>
+        <h2>Metrics and Visualizations</h2>
+        <p><Link style={{ color: 'white' }} to={"/activity"}>Recent Lending Activity</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/revenue"}>Owner Lending Revenue</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/borrower"}>Borrower Analytics</Link></p>
+        <h2>Bulk Lending Transactions</h2>
+        <p><Link style={{ color: 'white' }} to={"/bulklend"}>Bulk Lending</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/bulkcancel"}>Bulk Cancel</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/bulkend"}>Bulk Claim End</Link></p>
       </div>
     );
   }
