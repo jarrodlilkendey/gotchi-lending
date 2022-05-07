@@ -178,8 +178,26 @@ class MyLendingRevenue extends Component {
   renderTable() {
     if (this.state.myRentals) {
       let columns = [
-        { field: 'id', headerName: 'Listing ID', width: 90 },
-        { field: 'gotchiId', headerName: 'Gotchi ID', width: 90 },
+        {
+          field: 'id',
+          headerName: 'Listing',
+          width: 90,
+          renderCell: (params: GridCellParams) => (
+            <a href={`https://app.aavegotchi.com/lending/${params.value}`} target="_blank">
+              {params.value}
+            </a>
+          )
+        },
+        {
+          field: 'gotchiId',
+          headerName: 'Gotchi ID',
+          width: 90,
+          renderCell: (params: GridCellParams) => (
+            <a href={`https://app.aavegotchi.com/gotchi/${params.value}`} target="_blank">
+              {params.value}
+            </a>
+          )
+        },
         { field: 'ended', headerName: 'Ended', width: 180 },
         { field: 'splitOwner', headerName: 'Owner %', width: 90 },
         { field: 'ownersGhst', headerName: 'GHST', width: 90 },
@@ -187,7 +205,16 @@ class MyLendingRevenue extends Component {
         { field: 'ownersFomo', headerName: "FOMO", width: 90 },
         { field: 'ownersAlpha', headerName: "ALPHA", width: 90 },
         { field: 'ownersKek', headerName: "KEK", width: 90 },
-        { field: 'renter', headerName: 'Borrower', width: 330 },
+        {
+          field: 'renter',
+          headerName: 'Borrower',
+          width: 330,
+          renderCell: (params: GridCellParams) => (
+            <a href={`/performance?renter=${params.value}`} target="_blank">
+              {params.value}
+            </a>
+          )
+        },
       ];
 
       let data = [];
