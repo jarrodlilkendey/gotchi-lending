@@ -115,10 +115,19 @@ class RenterPerformance extends Component {
   renderRenterPerformance() {
     if (this.state.renterPerformance) {
       let columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        { field: 'startTimestamp', headerName: 'Start', width: 140 },
+        {
+          field: 'id',
+          headerName: 'Listing',
+          width: 90,
+          renderCell: (params: GridCellParams) => (
+            <a href={`https://app.aavegotchi.com/lending/${params.value}`} target="_blank">
+              {params.value}
+            </a>
+          )
+        },
+        { field: 'startTimestamp', headerName: 'Start Timestamp', width: 140 },
         { field: 'startRelative', headerName: 'Start Relative', width: 140 },
-        { field: 'endTimestamp', headerName: 'End', width: 140 },
+        { field: 'endTimestamp', headerName: 'End Timestamp', width: 140 },
         { field: 'endRelative', headerName: 'End Relative', width: 140 },
         { field: 'claimedFUD', headerName: 'Claimed FUD', width: 140 },
         { field: 'claimedFOMO', headerName: 'Claimed FOMO', width: 140 },
@@ -142,6 +151,7 @@ class RenterPerformance extends Component {
       });
 
       console.log('rows', rows);
+      rows = _.orderBy(rows, ['startTimestamp'], ['desc']);
 
       return (
         <div>
@@ -167,7 +177,7 @@ class RenterPerformance extends Component {
       <div>
         <h1>Renter Performance</h1>
         {this.state.renter &&
-          <p>Renters Gotchis Link: <a href={`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`} target="_blank">{`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`}</a></p>
+          <p>Renters Current Gotchis: <a style={{color: 'white'}} href={`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`} target="_blank">{`https://app.aavegotchi.com/aavegotchis/${this.state.renter.toLowerCase()}`}</a></p>
         }
         {this.renderListingPerformance()}
         {this.renderRenterPerformance()}
