@@ -52,7 +52,19 @@ export default function Header() {
            </ul>
          </div>
          <div className="navbar-brand navbar-right">
-          <p><a style={{ color: 'white '}} href="https://discord.gg/r5fnNeBRye">SUPPORT</a> A WAGMI Warriors Property <a href="https://discord.gg/TNneBnhrM2"><img alt="WAGMI Warriors Guild" src="/smug-wagie.png" width="48px" /></a></p>
+          <div className="row">
+            <div className="col">
+              <div className="row">
+                <a style={{ color: 'white ', fontSize: '18px'}}>A WAGMI Warriors Property</a>
+              </div>
+              <div className="row">
+                <a style={{ color: 'white ', fontSize: '16px'}} href="https://discord.gg/r5fnNeBRye">Get Support</a>
+              </div>
+            </div>
+            <div className="col">
+              <p><a href="https://discord.gg/TNneBnhrM2"><img alt="WAGMI Warriors Guild" src="/smug-wagie.png" width="48px" /></a></p>
+            </div>
+          </div>
          </div>
        </div>
     </nav>

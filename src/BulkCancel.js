@@ -16,7 +16,9 @@ class BulkCancel extends Component {
 
     this.state = {
       selectedGotchis: [],
-      uncancelledRentalGotchis: []
+      uncancelledRentalGotchis: [],
+      gasPriceGwei: 35,
+      gasLimit: 110000
     };
   }
 
@@ -34,8 +36,10 @@ class BulkCancel extends Component {
       })
   }
 
-  handleChange(key, value) {
-    this.setState({ [key]: value });
+  onIntegerInputChange(event) {
+    this.setState({
+      [event.target.id]: parseInt(event.target.value)
+    });
   }
 
   cancelRentals() {
@@ -49,7 +53,11 @@ class BulkCancel extends Component {
       );
 
       diamondContractWithSigner.cancelGotchiLendingByToken(
-        parseInt(g)
+        parseInt(g),
+        {
+          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
+          gasLimit: this.state.gasLimit
+        }
       );
     });
   }
@@ -110,7 +118,16 @@ class BulkCancel extends Component {
     return(
       <div>
         <h1>Bulk Cancelooor</h1>
-
+        <div class="row">
+          <div class="col-1">
+            <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
+            <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
+          </div>
+          <div class="col-2">
+            <label for="gasLimit" className="col col-form-label">Gas Limit</label>
+            <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
+          </div>
+        </div>
         {this.renderCancellableGotchis()}
       </div>
     )

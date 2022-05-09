@@ -16,7 +16,9 @@ class BulkClaimEnd extends Component {
 
     this.state = {
       selectedGotchis: [],
-      claimEndableGotchis: []
+      claimEndableGotchis: [],
+      gasPriceGwei: 35,
+      gasLimit: 450000
     };
   }
 
@@ -32,10 +34,6 @@ class BulkClaimEnd extends Component {
       })
   }
 
-  handleChange(key, value) {
-    this.setState({ [key]: value });
-  }
-
   claimEndRentals() {
     console.log('claimEndRentals', this.state.selectedGotchis);
 
@@ -48,9 +46,19 @@ class BulkClaimEnd extends Component {
 
       diamondContractWithSigner.claimAndEndGotchiLending(
         parseInt(g),
+        {
+          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
+          gasLimit: this.state.gasLimit
+        }
         // {gasPrice: 35000000000, gasLimit: 350000 }
         // {gasPrice: 45000000000, gasLimit: 300000 }
       );
+    });
+  }
+
+  onIntegerInputChange(event) {
+    this.setState({
+      [event.target.id]: parseInt(event.target.value)
     });
   }
 
@@ -128,6 +136,16 @@ class BulkClaimEnd extends Component {
     return(
       <div>
         <h1>Bulk Claim Endooor</h1>
+        <div class="row">
+          <div class="col-1">
+            <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
+            <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
+          </div>
+          <div class="col-2">
+            <label for="gasLimit" className="col col-form-label">Gas Limit</label>
+            <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
+          </div>
+        </div>
         {this.renderClaimEndableGotchis()}
       </div>
     )
