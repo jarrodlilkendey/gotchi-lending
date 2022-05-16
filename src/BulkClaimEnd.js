@@ -9,6 +9,7 @@ const _ = require("lodash");
 const moment = require('moment');
 
 const diamond = require("./diamond.json");
+const batchAbi = require("./batch-abi.json");
 
 class BulkClaimEnd extends Component {
   constructor(props) {
@@ -17,8 +18,8 @@ class BulkClaimEnd extends Component {
     this.state = {
       selectedGotchis: [],
       claimEndableGotchis: [],
-      gasPriceGwei: 35,
-      gasLimit: 450000
+      // gasPriceGwei: 35,
+      // gasLimit: 450000
     };
   }
 
@@ -26,11 +27,12 @@ class BulkClaimEnd extends Component {
     await window.ethereum.enable();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamond, provider);
+    const batchContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", batchAbi, provider);
 
     retrieveClaimable(window.ethereum.selectedAddress)
       .then((claimEndableGotchis) => {
         console.log('claimEndableGotchis', claimEndableGotchis)
-        this.setState({ claimEndableGotchis, provider, diamondContract });
+        this.setState({ claimEndableGotchis, provider, diamondContract, batchContract });
       })
   }
 
@@ -38,22 +40,27 @@ class BulkClaimEnd extends Component {
     console.log('claimEndRentals', this.state.selectedGotchis);
 
     const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
+    const batchContractWithSigner = this.state.batchContract.connect(this.state.provider.getSigner());
+
+    let bulkClaimEnds = [];
 
     this.state.selectedGotchis.map((g) => {
-      console.log(
-        parseInt(g),
-      );
-
-      diamondContractWithSigner.claimAndEndGotchiLending(
-        parseInt(g),
-        {
-          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
-          gasLimit: this.state.gasLimit
-        }
-        // {gasPrice: 35000000000, gasLimit: 350000 }
-        // {gasPrice: 45000000000, gasLimit: 300000 }
-      );
+      bulkClaimEnds.push(parseInt(g));
+      // console.log(
+      //   parseInt(g),
+      // );
+      //
+      // diamondContractWithSigner.claimAndEndGotchiLending(
+      //   parseInt(g),
+      //   {
+      //     gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
+      //     gasLimit: this.state.gasLimit
+      //   }
+      // );
     });
+
+    console.log('bulkClaimEnds', bulkClaimEnds);
+    batchContractWithSigner.batchClaimAndEndGotchiLending(bulkClaimEnds);
   }
 
   onIntegerInputChange(event) {
@@ -136,6 +143,7 @@ class BulkClaimEnd extends Component {
     return(
       <div>
         <h1>Bulk Claim Endooor</h1>
+        {/*
         <div class="row">
           <div class="col-1">
             <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
@@ -146,6 +154,7 @@ class BulkClaimEnd extends Component {
             <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
           </div>
         </div>
+        */}
         {this.renderClaimEndableGotchis()}
       </div>
     )
