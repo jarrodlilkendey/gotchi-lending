@@ -9,6 +9,7 @@ const _ = require("lodash");
 const moment = require('moment');
 
 const diamond = require("./diamond.json");
+const batchAbi = require("./batch-abi.json");
 
 class BulkCancel extends Component {
   constructor(props) {
@@ -17,8 +18,8 @@ class BulkCancel extends Component {
     this.state = {
       selectedGotchis: [],
       uncancelledRentalGotchis: [],
-      gasPriceGwei: 35,
-      gasLimit: 110000
+      // gasPriceGwei: 35,
+      // gasLimit: 110000
     };
   }
 
@@ -26,13 +27,14 @@ class BulkCancel extends Component {
     await window.ethereum.enable();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamond, provider);
+    const batchContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", batchAbi, provider);
 
     console.log(diamondContract);
 
     retrieveOwnedUncancelledRentalAavegotchis(window.ethereum.selectedAddress)
       .then((uncancelledRentalGotchis) => {
         console.log('uncancelledRentalGotchis', uncancelledRentalGotchis)
-        this.setState({ uncancelledRentalGotchis, provider, diamondContract });
+        this.setState({ uncancelledRentalGotchis, provider, diamondContract, batchContract });
       })
   }
 
@@ -46,20 +48,28 @@ class BulkCancel extends Component {
     console.log('cancelRentals', this.state.selectedGotchis);
 
     const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
+    const batchContractWithSigner = this.state.batchContract.connect(this.state.provider.getSigner());
+
+    let bulkCancels = [];
 
     this.state.selectedGotchis.map((g) => {
-      console.log(
-        parseInt(g),
-      );
+      bulkCancels.push(parseInt(g));
 
-      diamondContractWithSigner.cancelGotchiLendingByToken(
-        parseInt(g),
-        {
-          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
-          gasLimit: this.state.gasLimit
-        }
-      );
+      // console.log(
+      //   parseInt(g),
+      // );
+
+      // diamondContractWithSigner.cancelGotchiLendingByToken(
+      //   parseInt(g),
+      //   {
+      //     gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
+      //     gasLimit: this.state.gasLimit
+      //   }
+      // );
     });
+
+    console.log('bulkCancels', bulkCancels);
+    batchContractWithSigner.batchCancelGotchiLendingByToken(bulkCancels);
   }
 
   renderCancellableGotchis() {
@@ -118,6 +128,7 @@ class BulkCancel extends Component {
     return(
       <div>
         <h1>Bulk Cancelooor</h1>
+        {/*
         <div class="row">
           <div class="col-1">
             <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
@@ -128,6 +139,7 @@ class BulkCancel extends Component {
             <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
           </div>
         </div>
+        */}
         {this.renderCancellableGotchis()}
       </div>
     )
