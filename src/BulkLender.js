@@ -7,7 +7,8 @@ import { getUnlentGotchis } from './LendingUtil';
 const { ethers } = require("ethers");
 const _ = require("lodash");
 
-const diamond = require("./diamond.json");
+const diamondAbi = require("./diamond.json");
+const batchAbi = require("./batch-abi.json");
 
 class BulkLender extends Component {
   constructor(props) {
@@ -29,19 +30,21 @@ class BulkLender extends Component {
       kekEnabled: true,
       sharedTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C'],
       isValid: true,
-      gasPriceGwei: 35
+      // gasPriceGwei: 35
     };
   }
 
   async componentDidMount() {
     await window.ethereum.enable();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamond, provider);
+    const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamondAbi, provider);
+    const batchContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", batchAbi, provider);
+    console.log('batchContract', batchContract)
 
     getUnlentGotchis(window.ethereum.selectedAddress)
       .then((unlentGotchis) => {
         console.log('unlentGotchis', unlentGotchis)
-        this.setState({ unlentGotchis, provider, diamondContract });
+        this.setState({ unlentGotchis, provider, diamondContract, batchContract });
       })
   }
 
@@ -135,52 +138,24 @@ class BulkLender extends Component {
       revenueTokens: this.state.sharedTokens
     };
 
-
-    // let lendingConfig = {
-    //   // initialCost: "1.9",
-    //   // initialCost: "0.5",
-    //   // initialCost: "0.0",
-    //   // initialCost: "1.5",
-    //   // initialCost: "1.5",
-    //   // initialCost: "0.1",
-    //   initialCost: "0.0",
-    //   // initialCost: "0.8",
-    //   // period: 3600 * 4, // 1hr = 3600 seconds
-    //   // period: 3600 * 12, // 1hr = 3600 seconds
-    //   // period: 3600 * 6, // 1hr = 3600 seconds
-    //   // period: 3600 * 12, // 1hr = 3600 seconds
-    //   // period: 3600 * 6, // 1hr = 3600 seconds
-    //   // period: 3600 * 10, // 1hr = 3600 seconds
-    //   period: 3600 * 6, // 1hr = 3600 seconds
-    //   // period: 3600 * 6, // 1hr = 3600 seconds
-    //   // revenueSplit: [4, 95, 1],
-    //   // revenueSplit: [39, 60, 1],
-    //   // revenueSplit: [0, 100, 0],
-    //   // revenueSplit: [20, 75, 5],
-    //   // revenueSplit: [20, 75, 5],
-    //   // revenueSplit: [29, 70, 1],
-    //   revenueSplit: [35, 60, 5],
-    //   // revenueSplit: [30, 65, 5],
-    //   // revenueSplit: [40, 50, 10],
-    //   // revenueSplit: [30, 70, 0],
-    //   // revenueSplit: [25, 70, 5],
-    //   originalOwner: window.ethereum.selectedAddress,
-    //   thirdParty: '0xE237122dbCA1001A9A3c1aB42CB8AE0c7bffc338',
-    //   // thirdParty: '0x0000000000000000000000000000000000000000',
-    //   // thirdParty: '0xADEe3f4863c1a31a5Cd422c8C6FAE39c2ac15447',
-    //   // whitelistId: 1556,
-    //   // whitelistId: 3444,
-    //   // whitelistId: 1983,
-    //   whitelistId: 3444,
-    //   // whitelistId: 0,
-    //   // whitelistId: 3540,
-    //   revenueTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C']
-    // };
-
     const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
+    const batchContractWithSigner = this.state.batchContract.connect(this.state.provider.getSigner());
+
+    let bulkAdds = [];
 
     this.state.selectedGotchis.map((g) => {
-      console.log(
+      // console.log(
+      //   parseInt(g),
+      //   ethers.utils.parseEther(lendingConfig.initialCost),
+      //   lendingConfig.period,
+      //   lendingConfig.revenueSplit,
+      //   lendingConfig.originalOwner,
+      //   lendingConfig.thirdParty,
+      //   lendingConfig.whitelistId,
+      //   lendingConfig.revenueTokens
+      // );
+
+      bulkAdds.push([
         parseInt(g),
         ethers.utils.parseEther(lendingConfig.initialCost),
         lendingConfig.period,
@@ -189,32 +164,27 @@ class BulkLender extends Component {
         lendingConfig.thirdParty,
         lendingConfig.whitelistId,
         lendingConfig.revenueTokens
-      );
+      ]);
 
-      diamondContractWithSigner.addGotchiLending(
-        parseInt(g),
-        ethers.utils.parseEther(lendingConfig.initialCost),
-        lendingConfig.period,
-        lendingConfig.revenueSplit,
-        lendingConfig.originalOwner,
-        lendingConfig.thirdParty,
-        lendingConfig.whitelistId,
-        lendingConfig.revenueTokens,
-        {
-          gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"), //35000000000,
-          gasLimit: 500438
-        }
-        // { gasPrice: 45000000000, gasLimit: 500438 }
-      );
+      // diamondContractWithSigner.addGotchiLending(
+      //   parseInt(g),
+      //   ethers.utils.parseEther(lendingConfig.initialCost),
+      //   lendingConfig.period,
+      //   lendingConfig.revenueSplit,
+      //   lendingConfig.originalOwner,
+      //   lendingConfig.thirdParty,
+      //   lendingConfig.whitelistId,
+      //   lendingConfig.revenueTokens,
+      //   {
+      //     gasPrice: ethers.utils.parseUnits(this.state.gasPriceGwei.toString(), "gwei"),
+      //     gasLimit: 500438
+      //   }
+      // );
     });
-  }
 
-  // initialCostInGHST: "0.0",
-  // periodInHours: 1,
-  // revenueSplit: [100, 0, 0],
-  // thirdParty: "",
-  // whitelistId: 0,
-  // revenueTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C']
+    console.log('bulkAdds', bulkAdds);
+    batchContractWithSigner.batchAddGotchiListing(bulkAdds);
+  }
 
   renderLendingParameters() {
     return(
@@ -266,14 +236,14 @@ class BulkLender extends Component {
               </div>
             </div>
           </div>
-          <div class="col-1">
+          <div class="col-2">
             <label for="whitelistId" className="col col-form-label">Whitelist ID</label>
             <input type="number" min="0" step="1" className="form-control" id="whitelistId" placeholder="Whitelist ID" value={this.state.whitelistId} onChange={(event) => this.onIntegerInputChange(event)} />
           </div>
-          <div class="col-1">
+          {/*<div class="col-1">
             <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
             <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
-          </div>
+          </div>*/}
         </div>
         {this.state.otherSplit > 0 &&
           <div class="row">
