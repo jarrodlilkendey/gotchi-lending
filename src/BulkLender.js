@@ -39,7 +39,6 @@ class BulkLender extends Component {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamondAbi, provider);
     const batchContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", batchAbi, provider);
-    console.log('batchContract', batchContract)
 
     getUnlentGotchis(window.ethereum.selectedAddress)
       .then((unlentGotchis) => {
