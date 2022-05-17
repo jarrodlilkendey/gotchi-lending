@@ -25,6 +25,7 @@ export const getUnlentGotchis = async(owner) => {
         ) {
           id
           name
+          kinship
         }
       }`
     }

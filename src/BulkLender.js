@@ -261,6 +261,7 @@ class BulkLender extends Component {
       let columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Name', width: 240 },
+        { field: 'kinship', headerName: 'Kinship', width: 240 },
       ];
 
       return (
