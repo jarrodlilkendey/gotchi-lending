@@ -6,9 +6,11 @@ import { getUnlentGotchis } from './LendingUtil';
 
 const { ethers } = require("ethers");
 const _ = require("lodash");
+const moment = require('moment');
 
 const diamondAbi = require("./diamond.json");
 const batchAbi = require("./batch-abi.json");
+const realmDiamondAbi = require("./realm-diamond.json");
 
 class BulkLender extends Component {
   constructor(props) {
@@ -39,11 +41,18 @@ class BulkLender extends Component {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const diamondContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", diamondAbi, provider);
     const batchContract = new ethers.Contract("0x86935F11C86623deC8a25696E1C19a8659CbF95d", batchAbi, provider);
+    const realmDiamondContract = new ethers.Contract("0x1D0360BaC7299C86Ec8E99d0c1C9A95FEfaF2a11", realmDiamondAbi, provider);
 
     getUnlentGotchis(window.ethereum.selectedAddress)
-      .then((unlentGotchis) => {
-        console.log('unlentGotchis', unlentGotchis)
-        this.setState({ unlentGotchis, provider, diamondContract, batchContract });
+      .then(async (unlentGotchis) => {
+        // for (let i = 0; i < unlentGotchis.length; i++) {
+        //   unlentGotchis[i].lastChanneledUnix = await realmDiamondContract.getLastChanneled(parseInt(unlentGotchis[i].id));
+        //   unlentGotchis[i].lastChanneledRelative = moment.unix(unlentGotchis[i].lastChanneledUnix).fromNow();
+        // }
+        //
+        // console.log('unlentGotchis', unlentGotchis)
+
+        this.setState({ unlentGotchis, provider, diamondContract, batchContract, realmDiamondContract });
       })
   }
 
@@ -262,6 +271,8 @@ class BulkLender extends Component {
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Name', width: 240 },
         { field: 'kinship', headerName: 'Kinship', width: 240 },
+        // { field: 'lastChanneledUnix', headerName: 'Last Channeled Timestamp', width: 240 },
+        // { field: 'lastChanneledRelative', headerName: 'Last Channeled Relative', width: 240 },
       ];
 
       return (

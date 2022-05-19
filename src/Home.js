@@ -15,6 +15,9 @@ class Home extends Component {
         <p><Link style={{ color: 'white' }} to={"/bulklend"}>Bulk Lending</Link></p>
         <p><Link style={{ color: 'white' }} to={"/bulkcancel"}>Bulk Cancel</Link></p>
         <p><Link style={{ color: 'white' }} to={"/bulkend"}>Bulk Claim End</Link></p>
+        <h2>Quality of Life</h2>
+        <p><Link style={{ color: 'white' }} to={"/Land"}>Channelable Land</Link></p>
+        <p>Channelable Gotchis (Coming Soon)</p>
       </div>
     );
   }
