@@ -98,7 +98,7 @@ class ChannelableLand extends Component {
           <div class="row">
             <div class="col-12">
               <div className="input-group">
-                <label for="address" className="col col-form-label">Wallet Address</label>
+                <label for="address" className="col col-form-label">Land Owner Wallet Address</label>
                 <input type="text" className="form-control" id="address" placeholder="Other Address" value={this.state.address} onChange={(event) => this.onInputChange(event)} />
                 <button type="button" className="btn btn-primary" onClick={() => this.loadMyParcels()}>Load My Parcels & Installations</button>
               </div>
