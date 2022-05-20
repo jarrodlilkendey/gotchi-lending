@@ -16,7 +16,7 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
         parcels(
           first: 1000,
           where: {
-            owner: "${owner}"
+            owner: "${owner.toLowerCase()}"
           },
           orderBy: district,
           orderDirection:asc
