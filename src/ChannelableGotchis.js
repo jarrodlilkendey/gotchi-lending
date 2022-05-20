@@ -3,7 +3,7 @@ import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { Routes, Route, Link } from "react-router-dom";
 
-import { getMyLand } from './LandUtil';
+import { getMyGotchis } from './GotchisUtil';
 import { withRouter } from './withRouter';
 
 const { ethers } = require("ethers");
@@ -14,7 +14,7 @@ const diamond = require("./diamond.json");
 const realmDiamondAbi = require("./realm-diamond.json");
 const installationDiamondAbi = require("./installation-diamond.json");
 
-class ChannelableLand extends Component {
+class ChannelableGotchis extends Component {
   constructor(props) {
     super(props);
 
@@ -31,36 +31,32 @@ class ChannelableLand extends Component {
     this.setState({ address: window.ethereum.selectedAddress, realmDiamondContract, installationDiamondContract, loading: false });
   }
 
-  renderLandTable() {
-    if (this.state.land && this.state.land.length > 0) {
+  renderGotchisTable() {
+    if (this.state.gotchis && this.state.gotchis.length > 0) {
       let columns = [
         {
           field: 'id', headerName: 'ID', width: 80,
           renderCell: (params: GridCellParams) => (
-            <a href={`https://gotchiverse.io/browse?tokenId=${params.value}`} target="_blank">
+            <a href={`https://app.aavegotchi.com/gotchi/${params.value}`} target="_blank">
               {params.value}
             </a>
           )
         },
-        { field: 'district', headerName: 'District', width: 90 },
-        { field: 'parcelHash', headerName: 'Name', width: 240 },
-        { field: 'size', headerName: 'Size', width: 120 },
-        { field: 'hasAltar', headerName: 'Has Aaltar?', width: 120 },
-        { field: 'altarLevel', headerName: 'Aaltar Level', width: 120 },
-        { field: 'altarCooldown', headerName: 'Aaltar Cooldown', width: 140 },
-        { field: 'isChannelable', headerName: 'Channelable?', width: 140 },
-        { field: 'lastAltarChannelRelative', headerName: 'Aaltar Last Channeled', width: 200 },
-        { field: 'lastAltarChannel', headerName: 'Aaltar Last Channeled', width: 200 },
+        { field: 'name', headerName: 'Name', width: 240 },
+        { field: 'kinship', headerName: 'Kinship', width: 120 },
+        { field: 'channelable', headerName: 'Channelable?', width: 120 },
+        { field: 'lastChanneledUnix', headerName: 'Last Channeled Timestamp', width: 240 },
+        { field: 'lastChanneledRelative', headerName: 'Last Channeled Relative', width: 240 },
       ];
 
       return (
         <div>
           <div>
-            <h2>My Land</h2>
+            <h2>My Gotchis</h2>
           </div>
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
-              rows={this.state.land}
+              rows={this.state.gotchis}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -70,7 +66,7 @@ class ChannelableLand extends Component {
       );
     } else if (this.state.loading) {
       return(
-        <p>Loading land and installations...</p>
+        <p>Loading Gotchis...</p>
       );
     }
   }
@@ -81,13 +77,13 @@ class ChannelableLand extends Component {
     });
   }
 
-  loadMyParcels() {
+  loadMyGotchis() {
     this.setState({
-      loading: true, land: []
+      loading: true, gotchis: []
     }, () => {
-      getMyLand(this.state.address, this.state.installationDiamondContract, this.state.realmDiamondContract)
-        .then(async (land) => {
-          this.setState({ land });
+      getMyGotchis(this.state.address, this.state.installationDiamondContract, this.state.realmDiamondContract)
+        .then(async (gotchis) => {
+          this.setState({ gotchis });
         })
     });
   }
@@ -99,9 +95,9 @@ class ChannelableLand extends Component {
           <div class="row">
             <div class="col-12">
               <div className="input-group">
-                <label for="address" className="col col-form-label">Land Owner Wallet Address</label>
+                <label for="address" className="col col-form-label">Wallet Address</label>
                 <input type="text" className="form-control" id="address" placeholder="Address" value={this.state.address} onChange={(event) => this.onInputChange(event)} />
-                <button type="button" className="btn btn-primary" onClick={() => this.loadMyParcels()}>Load Parcels & Installations in Wallet</button>
+                <button type="button" className="btn btn-primary" onClick={() => this.loadMyGotchis()}>Load Gotchis in Wallet</button>
               </div>
             </div>
           </div>
@@ -113,13 +109,13 @@ class ChannelableLand extends Component {
   render() {
     return(
       <div>
-        <h1>Channelable Land</h1>
-        <p>Want Channelable Gotchis? <Link style={{ color: 'white' }} to={"/gotchis"}>Channelable Gotchis</Link></p>
+        <h1>Channelable Gotchis</h1>
+        <p>Want Channelable Land? <Link style={{ color: 'white' }} to={"/land"}>Channelable Land</Link></p>
         {this.renderAddressForm()}
-        {this.renderLandTable()}
+        {this.renderGotchisTable()}
       </div>
     )
   }
 }
 
-export default ChannelableLand;
+export default ChannelableGotchis;

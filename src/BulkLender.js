@@ -45,13 +45,6 @@ class BulkLender extends Component {
 
     getUnlentGotchis(window.ethereum.selectedAddress)
       .then(async (unlentGotchis) => {
-        // for (let i = 0; i < unlentGotchis.length; i++) {
-        //   unlentGotchis[i].lastChanneledUnix = await realmDiamondContract.getLastChanneled(parseInt(unlentGotchis[i].id));
-        //   unlentGotchis[i].lastChanneledRelative = moment.unix(unlentGotchis[i].lastChanneledUnix).fromNow();
-        // }
-        //
-        // console.log('unlentGotchis', unlentGotchis)
-
         this.setState({ unlentGotchis, provider, diamondContract, batchContract, realmDiamondContract });
       })
   }
@@ -270,9 +263,7 @@ class BulkLender extends Component {
       let columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Name', width: 240 },
-        { field: 'kinship', headerName: 'Kinship', width: 240 },
-        // { field: 'lastChanneledUnix', headerName: 'Last Channeled Timestamp', width: 240 },
-        // { field: 'lastChanneledRelative', headerName: 'Last Channeled Relative', width: 240 },
+        { field: 'kinship', headerName: 'Kinship', width: 240 }
       ];
 
       return (

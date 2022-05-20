@@ -14,6 +14,7 @@ import RecentLendingActivity from './RecentLendingActivity';
 import MyLendingRevenue from './MyLendingRevenue';
 // import WhitelistManagement from './WhitelistManagement';
 import ChannelableLand from './ChannelableLand';
+import ChannelableGotchis from './ChannelableGotchis';
 
 import Header from './Header';
 import Home from './Home';
@@ -90,6 +91,7 @@ class App extends Component {
               <Route path="/activity" element={<RecentLendingActivity />} />
               <Route path="/revenue" element={<MyLendingRevenue />} />
               <Route path="/land" element={<ChannelableLand />} />
+              <Route path="/gotchis" element={<ChannelableGotchis />} />
               {/*Route path="/whitelist" element={<WhitelistManagement />} />*/}
             </Routes>
           </div>
