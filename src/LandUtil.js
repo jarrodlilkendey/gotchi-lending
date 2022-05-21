@@ -61,7 +61,8 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
     if (p.hasAltar) {
       p.lastAltarChannel = await realmDiamondContract.getParcelLastChanneled(p.id);
       if (p.lastAltarChannel != 0) {
-        p.lastAltarChannelRelative = moment.unix(p.lastAltarChannel).fromNow();
+        let duration = moment.duration(moment().diff(moment.unix(p.lastAltarChannel)));
+        p.lastAltarChannelRelative = `${parseInt(duration.asHours())} hours and ${parseInt(duration.asMinutes()) % 60} mins ago`;
         let diffHours = moment().diff(moment.unix(p.lastAltarChannel), 'hours');
         if (diffHours >= p.altarCooldown) {
           p.isChannelable = true;

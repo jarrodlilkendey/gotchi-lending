@@ -29,8 +29,13 @@ export const getMyGotchis = async(owner, installationDiamondContract, realmDiamo
     let a = unlentGotchis.data.data.aavegotchis[i];
     a.kinship = parseInt(a.kinship);
     a.lastChanneledUnix = await realmDiamondContract.getLastChanneled(parseInt(a.id));
-    a.lastChanneledRelative = moment.unix(a.lastChanneledUnix).fromNow();
+    a.lastChanneledRelative = '';
     a.channelable = false;
+
+    if (a.lastChanneledUnix != 0) {
+      let duration = moment.duration(moment().diff(moment.unix(a.lastChanneledUnix)));
+      a.lastChanneledRelative = `${parseInt(duration.asHours())} hours and ${parseInt(duration.asMinutes()) % 60} mins ago`;
+    }
 
     let lastChanneledDay = Math.floor(a.lastChanneledUnix / (60 * 60 * 24));
     let currentDay = Math.floor(moment().unix() / (60 * 60 * 24));

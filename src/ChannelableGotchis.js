@@ -19,6 +19,8 @@ class ChannelableGotchis extends Component {
     super(props);
 
     this.state = {
+      hasError: false,
+      errorMessage: ''
     };
   }
 
@@ -82,9 +84,13 @@ class ChannelableGotchis extends Component {
       loading: true, gotchis: []
     }, () => {
       getMyGotchis(this.state.address, this.state.installationDiamondContract, this.state.realmDiamondContract)
-        .then(async (gotchis) => {
-          this.setState({ gotchis });
+        .then((gotchis) => {
+          this.setState({ gotchis, hasError: false, errorMessage: '' });
         })
+        .catch((error) => {
+          console.log('error', error);
+          this.setState({ hasError: true, errorMessage: error.message });
+        });
     });
   }
 
@@ -106,12 +112,24 @@ class ChannelableGotchis extends Component {
     }
   }
 
+
+  renderErrors() {
+    if (this.state.hasError) {
+      return(
+        <div className="alert alert-danger" role="alert">
+          Error: {this.state.errorMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
         <h1>Channelable Gotchis</h1>
         <p>Want Channelable Land? <Link style={{ color: 'white' }} to={"/land"}>Channelable Land</Link></p>
         {this.renderAddressForm()}
+        {this.renderErrors()}
         {this.renderGotchisTable()}
       </div>
     )

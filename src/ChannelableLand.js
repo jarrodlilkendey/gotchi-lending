@@ -19,6 +19,8 @@ class ChannelableLand extends Component {
     super(props);
 
     this.state = {
+      hasError: false,
+      errorMessage: ''
     };
   }
 
@@ -86,9 +88,13 @@ class ChannelableLand extends Component {
       loading: true, land: []
     }, () => {
       getMyLand(this.state.address, this.state.installationDiamondContract, this.state.realmDiamondContract)
-        .then(async (land) => {
-          this.setState({ land });
+        .then((land) => {
+          this.setState({ land, hasError: false, errorMessage: '' });
         })
+        .catch((error) => {
+          console.log('error', error);
+          this.setState({ hasError: true, errorMessage: error.message });
+        });
     });
   }
 
@@ -110,12 +116,23 @@ class ChannelableLand extends Component {
     }
   }
 
+  renderErrors() {
+    if (this.state.hasError) {
+      return(
+        <div className="alert alert-danger" role="alert">
+          Error: {this.state.errorMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
         <h1>Channelable Land</h1>
         <p>Want Channelable Gotchis? <Link style={{ color: 'white' }} to={"/gotchis"}>Channelable Gotchis</Link></p>
         {this.renderAddressForm()}
+        {this.renderErrors()}
         {this.renderLandTable()}
       </div>
     )
