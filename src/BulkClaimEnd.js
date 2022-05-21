@@ -18,6 +18,7 @@ class BulkClaimEnd extends Component {
     this.state = {
       selectedGotchis: [],
       claimEndableGotchis: [],
+      filterNonEndable: false
       // gasPriceGwei: 35,
       // gasLimit: 450000
     };
@@ -113,6 +114,11 @@ class BulkClaimEnd extends Component {
         rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}`, timeAgreedRelative: moment.unix(g.timeAgreed).fromNow(), upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
       });
 
+      let filteredRows = rows;
+      if (this.state.filterNonEndable) {
+        filteredRows = _.filter(rows, ['endable', true]);
+      }
+
       return (
         <div>
           <div>
@@ -123,7 +129,7 @@ class BulkClaimEnd extends Component {
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
               checkboxSelection
-              rows={rows}
+              rows={filteredRows}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -139,22 +145,34 @@ class BulkClaimEnd extends Component {
     }
   }
 
+  toggleFilter(event) {
+    this.setState({ filterNonEndable: !this.state.filterNonEndable });
+  }
+
   render() {
     return(
       <div>
         <h1>Bulk Claim Endooor</h1>
-        {/*
-        <div class="row">
-          <div class="col-1">
+
+        <div className="row">
+          <div className="col-3">
+            <div className="form-check">
+              <input className="form-check-input" type="checkbox" name="filterNonEndable" id="filterNonEndable" checked={this.state.filterNonEndable} onChange={(event) => this.toggleFilter(event)} />
+              <label className="form-check-label" for="filterNonEndable">
+                Filter Non Endable Listings
+              </label>
+            </div>
+          </div>
+          {/*<div class="col-1">
             <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
             <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
           </div>
           <div class="col-2">
             <label for="gasLimit" className="col col-form-label">Gas Limit</label>
             <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
-          </div>
+          </div>*/}
         </div>
-        */}
+
         {this.renderClaimEndableGotchis()}
       </div>
     )
