@@ -18,6 +18,8 @@ class BulkCancel extends Component {
     this.state = {
       selectedGotchis: [],
       uncancelledRentalGotchis: [],
+      hasError: false,
+      errorMessage: ''
       // gasPriceGwei: 35,
       // gasLimit: 110000
     };
@@ -69,7 +71,15 @@ class BulkCancel extends Component {
     });
 
     console.log('bulkCancels', bulkCancels);
-    batchContractWithSigner.batchCancelGotchiLendingByToken(bulkCancels);
+    batchContractWithSigner.batchCancelGotchiLendingByToken(bulkCancels)
+      .then((result) => {
+        console.log('result', result);
+        this.setState({ hasError: false, errorMessage: '' });
+      })
+      .catch((error) => {
+        console.log('error', error);
+        this.setState({ hasError: true, errorMessage: error.message });
+      });      
   }
 
   renderCancellableGotchis() {
@@ -124,6 +134,16 @@ class BulkCancel extends Component {
     }
   }
 
+  renderErrors() {
+    if (this.state.hasError) {
+      return(
+        <div className="alert alert-danger" role="alert">
+          Error: {this.state.errorMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
@@ -140,6 +160,7 @@ class BulkCancel extends Component {
           </div>
         </div>
         */}
+        {this.renderErrors()}
         {this.renderCancellableGotchis()}
       </div>
     )
