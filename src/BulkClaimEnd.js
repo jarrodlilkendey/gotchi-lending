@@ -18,7 +18,9 @@ class BulkClaimEnd extends Component {
     this.state = {
       selectedGotchis: [],
       claimEndableGotchis: [],
-      filterNonEndable: false
+      filterNonEndable: false,
+      hasError: false,
+      errorMessage: ''
       // gasPriceGwei: 35,
       // gasLimit: 450000
     };
@@ -37,7 +39,7 @@ class BulkClaimEnd extends Component {
       })
   }
 
-  claimEndRentals() {
+  async claimEndRentals() {
     console.log('claimEndRentals', this.state.selectedGotchis);
 
     const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
@@ -61,7 +63,15 @@ class BulkClaimEnd extends Component {
     });
 
     console.log('bulkClaimEnds', bulkClaimEnds);
-    batchContractWithSigner.batchClaimAndEndGotchiLending(bulkClaimEnds);
+    batchContractWithSigner.batchClaimAndEndGotchiLending(bulkClaimEnds)
+      .then((result) => {
+        console.log('result', result);
+        this.setState({ hasError: false, errorMessage: '' });
+      })
+      .catch((error) => {
+        console.log('error', error);
+        this.setState({ hasError: true, errorMessage: error.message });
+      });
   }
 
   onIntegerInputChange(event) {
@@ -149,30 +159,45 @@ class BulkClaimEnd extends Component {
     this.setState({ filterNonEndable: !this.state.filterNonEndable });
   }
 
+  renderInputs() {
+    return(
+      <div className="row">
+        <div className="col-3">
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" name="filterNonEndable" id="filterNonEndable" checked={this.state.filterNonEndable} onChange={(event) => this.toggleFilter(event)} />
+            <label className="form-check-label" for="filterNonEndable">
+              Filter Non Endable Listings
+            </label>
+          </div>
+        </div>
+        {/*<div class="col-1">
+          <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
+          <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
+        </div>
+        <div class="col-2">
+          <label for="gasLimit" className="col col-form-label">Gas Limit</label>
+          <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
+        </div>*/}
+      </div>
+    );
+  }
+
+  renderErrors() {
+    if (this.state.hasError) {
+      return(
+        <div className="alert alert-danger" role="alert">
+          Error: {this.state.errorMessage}
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
         <h1>Bulk Claim Endooor</h1>
-
-        <div className="row">
-          <div className="col-3">
-            <div className="form-check">
-              <input className="form-check-input" type="checkbox" name="filterNonEndable" id="filterNonEndable" checked={this.state.filterNonEndable} onChange={(event) => this.toggleFilter(event)} />
-              <label className="form-check-label" for="filterNonEndable">
-                Filter Non Endable Listings
-              </label>
-            </div>
-          </div>
-          {/*<div class="col-1">
-            <label for="gasPriceGwei" className="col col-form-label"><a style={{color:'white'}} target="_blank" href="https://polygonscan.com/gastracker">Gas Price</a></label>
-            <input type="number" min="0" step="1" className="form-control" id="gasPriceGwei" placeholder="Gas Price (Gwei)" value={this.state.gasPriceGwei} onChange={(event) => this.onIntegerInputChange(event)} />
-          </div>
-          <div class="col-2">
-            <label for="gasLimit" className="col col-form-label">Gas Limit</label>
-            <input type="number" min="0" step="1" className="form-control" id="gasLimit" placeholder="Gas Limit" value={this.state.gasLimit} onChange={(event) => this.onIntegerInputChange(event)} />
-          </div>*/}
-        </div>
-
+        {this.renderInputs()}
+        {this.renderErrors()}
         {this.renderClaimEndableGotchis()}
       </div>
     )
