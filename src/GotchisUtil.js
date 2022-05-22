@@ -4,23 +4,25 @@ const { ethers } = require('ethers');
 const moment = require('moment');
 
 export const getMyGotchis = async(owner, installationDiamondContract, realmDiamondContract) => {
+  let query = `{
+    aavegotchis(
+      first: 1000,
+      skip: 0,
+      where: {
+        status: 3,
+        owner: "${owner.toLowerCase()}"
+      }
+    ) {
+      id
+      name
+      kinship
+    }
+  }`;
+
   const unlentGotchis = await axios.post(
     'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
     {
-      query: `{
-        aavegotchis(
-          first: 1000,
-          skip: 0,
-          where: {
-            status: 3,
-            owner: "${owner}"
-          }
-        ) {
-          id
-          name
-          kinship
-        }
-      }`
+      query: query
     }
   );
 
