@@ -107,11 +107,11 @@ class BulkClaimEnd extends Component {
         { field: 'name', headerName: 'Name', width: 180 },
         { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 180 },
         { field: 'endable', headerName: 'Rental Endable', width: 240 },
-        { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 180 },
-        { field: 'timeAgreedRelative', headerName: 'Time Agreed', width: 180 },
+        { field: 'timeCreatedRelative', headerName: 'Since Listed', width: 180 },
+        { field: 'timeAgreedRelative', headerName: 'Since Agreed', width: 180 },
         { field: 'whitelistId', headerName: 'Whitelist ID', width: 180 },
         { field: 'lastClaimed', headerName: 'Last Claimed', width: 180 },
-        { field: 'lastClaimedRelative', headerName: 'Last Claimed', width: 180 },
+        { field: 'lastClaimedRelative', headerName: 'Since Claimed', width: 180 },
         { field: 'borrower', headerName: 'Renter', width: 480 },
       ];
 
@@ -121,7 +121,26 @@ class BulkClaimEnd extends Component {
         if ((moment().unix() - g.timeAgreed) > g.period) {
           endable = true;
         }
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), lastClaimedRelative: moment.unix(g.lastClaimed).fromNow(), name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}`, timeAgreedRelative: moment.unix(g.timeAgreed).fromNow(), upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
+
+        let timeCreatedDuration = moment.duration(moment().diff(moment.unix(g.timeCreated)));
+        let timeCreatedRelative = `${parseInt(timeCreatedDuration.asHours())} hours, ${parseInt(timeCreatedDuration.asMinutes()) % 60} mins ago`;
+
+        let lastClaimedDuration = moment.duration(moment().diff(moment.unix(g.lastClaimed)));
+        let lastClaimedRelative = '';
+        if (g.lastClaimed != 0) {
+          lastClaimedRelative = `${parseInt(lastClaimedDuration.asHours())} hours, ${parseInt(lastClaimedDuration.asMinutes()) % 60} mins ago`;
+        }
+
+        let timeAgreedDuration = moment.duration(moment().diff(moment.unix(g.timeAgreed)));
+        let timeAgreedRelative = '';
+        if (g.timeAgreed != 0) {
+          timeAgreedRelative = `${parseInt(timeAgreedDuration.asHours())} hours, ${parseInt(timeAgreedDuration.asMinutes()) % 60} mins ago`;
+        }
+
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: timeCreatedRelative, lastClaimedRelative: lastClaimedRelative,
+          name: g.gotchi.name, endable, performanceLink: `/performance?listing=${g.id}&renter=${g.borrower}`, timeAgreedRelative: timeAgreedRelative,
+          upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost))
+        });
       });
 
       let filteredRows = rows;

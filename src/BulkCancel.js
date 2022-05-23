@@ -79,7 +79,7 @@ class BulkCancel extends Component {
       .catch((error) => {
         console.log('error', error);
         this.setState({ hasError: true, errorMessage: error.message });
-      });      
+      });
   }
 
   renderCancellableGotchis() {
@@ -103,7 +103,9 @@ class BulkCancel extends Component {
 
       let rows = [];
       this.state.uncancelledRentalGotchis.map((g) => {
-        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: moment.unix(g.timeCreated).fromNow(), upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
+        let duration = moment.duration(moment().diff(moment.unix(g.timeCreated)));
+        let timeCreatedRelative = `${parseInt(duration.asHours())} hours and ${parseInt(duration.asMinutes()) % 60} mins ago`;
+        rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: timeCreatedRelative, upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
       });
 
       console.log(rows);
