@@ -20,7 +20,8 @@ class ChannelableGotchis extends Component {
 
     this.state = {
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      filterChanneledGotchis: false,
     };
   }
 
@@ -30,7 +31,28 @@ class ChannelableGotchis extends Component {
     const realmDiamondContract = new ethers.Contract("0x1D0360BaC7299C86Ec8E99d0c1C9A95FEfaF2a11", realmDiamondAbi, provider);
     const installationDiamondContract = new ethers.Contract("0x19f870bD94A34b3adAa9CaA439d333DA18d6812A", installationDiamondAbi, provider);
 
+    this.interval = setInterval(() => this.tick(), 1000);
+
     this.setState({ address: window.ethereum.selectedAddress, realmDiamondContract, installationDiamondContract, loading: false });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  tick() {
+    let utcNow = moment.utc();
+    let utcDeadline = moment.utc();
+    utcDeadline.add(1, 'day');
+    utcDeadline.hour(0).minute(0).second(0);
+    let duration = moment.duration(utcDeadline.diff(utcNow));
+    this.setState({
+      timer: {
+        hours: parseInt(duration.asHours()),
+        minutes: parseInt(duration.asMinutes() % 60),
+        seconds: parseInt(duration.asSeconds() % 60)
+      }
+    });
   }
 
   renderGotchisTable() {
@@ -51,14 +73,19 @@ class ChannelableGotchis extends Component {
         { field: 'lastChanneledRelative', headerName: 'Last Channeled Relative', width: 240 },
       ];
 
+      let filteredRows = this.state.gotchis;
+      if (this.state.filterChanneledGotchis) {
+        filteredRows = _.filter(filteredRows, ['channelable', true]);
+      }
+
       return (
         <div>
           <div>
-            <h2>My Gotchis</h2>
+            <h2>You Have { _.filter(this.state.gotchis, ['channelable', true]).length} Channelable Gotchis</h2>
           </div>
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
-              rows={this.state.gotchis}
+              rows={filteredRows}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -94,6 +121,10 @@ class ChannelableGotchis extends Component {
     });
   }
 
+  toggleFilter(event) {
+    this.setState({ filterChanneledGotchis: !this.state.filterChanneledGotchis });
+  }
+
   renderAddressForm() {
     if (this.state.address) {
       return(
@@ -112,6 +143,24 @@ class ChannelableGotchis extends Component {
     }
   }
 
+  renderFilter() {
+    if (this.state.gotchis && this.state.gotchis.length > 0) {
+      return(
+        <div>
+          <div class="row">
+            <div class="col-3">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" name="filterChanneledGotchis" id="filterChanneledGotchis" checked={this.state.filterChanneledGotchis} onChange={(event) => this.toggleFilter(event)} />
+                <label className="form-check-label" for="filterChanneledGotchis">
+                  Filter Channeled Gotchis
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
 
   renderErrors() {
     if (this.state.hasError) {
@@ -123,13 +172,23 @@ class ChannelableGotchis extends Component {
     }
   }
 
+  renderCountDownTimer() {
+    if (this.state.timer) {
+      return(
+        <p>All Gotchis become channelable again at 0:00 UTC time daily which is in {`${this.state.timer.hours} hours, ${this.state.timer.minutes} minutes, and ${this.state.timer.seconds} seconds`}</p>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
         <h1>Channelable Gotchis</h1>
         <p>Want Channelable Land? <Link style={{ color: 'white' }} to={"/land"}>Channelable Land</Link></p>
+        {this.renderCountDownTimer()}
         {this.renderAddressForm()}
         {this.renderErrors()}
+        {this.renderFilter()}
         {this.renderGotchisTable()}
       </div>
     )
