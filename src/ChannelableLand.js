@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Routes, Route, Link } from "react-router-dom";
 
 import { getMyLand } from './LandUtil';
@@ -72,6 +72,7 @@ class ChannelableLand extends Component {
               columns={columns}
               pageSize={100}
               density="compact"
+              components={{ Toolbar: GridToolbar }}
               />
           </div>
         </div>
