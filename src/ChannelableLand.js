@@ -20,7 +20,8 @@ class ChannelableLand extends Component {
 
     this.state = {
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      filterChanneledLands: false,
     };
   }
 
@@ -55,14 +56,19 @@ class ChannelableLand extends Component {
         { field: 'lastAltarChannel', headerName: 'Aaltar Last Channeled', width: 200 },
       ];
 
+      let filteredRows = this.state.land;
+      if (this.state.filterChanneledLands) {
+        filteredRows = _.filter(filteredRows, ['isChannelable', true]);
+      }
+
       return (
         <div>
           <div>
-            <h2>My Land</h2>
+            <h2>You Have { _.filter(this.state.land, ['isChannelable', true]).length} Channelable Lands</h2>
           </div>
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
-              rows={this.state.land}
+              rows={filteredRows}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -102,10 +108,10 @@ class ChannelableLand extends Component {
     if (this.state.address) {
       return(
         <div>
-          <div class="row">
-            <div class="col-12">
+          <div className="row">
+            <div className="col-12">
               <div className="input-group">
-                <label for="address" className="col col-form-label">Land Owner Wallet Address</label>
+                <label htmlFor="address" className="col col-form-label">Land Owner Wallet Address</label>
                 <input type="text" className="form-control" id="address" placeholder="Address" value={this.state.address} onChange={(event) => this.onInputChange(event)} />
                 <button type="button" className="btn btn-primary" onClick={() => this.loadMyParcels()}>Load Parcels & Installations in Wallet</button>
               </div>
@@ -126,6 +132,29 @@ class ChannelableLand extends Component {
     }
   }
 
+  toggleFilter(event) {
+    this.setState({ filterChanneledLands: !this.state.filterChanneledLands });
+  }
+
+  renderFilter() {
+    if (this.state.land && this.state.land.length > 0) {
+      return(
+        <div>
+          <div className="row">
+            <div className="col-3">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" name="filterChanneledLands" id="filterChanneledLands" checked={this.state.filterChanneledLands} onChange={(event) => this.toggleFilter(event)} />
+                <label className="form-check-label" for="filterChanneledLands">
+                  Filter Channeled Lands
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
@@ -133,6 +162,7 @@ class ChannelableLand extends Component {
         <p>Want Channelable Gotchis? <Link style={{ color: 'white' }} to={"/gotchis"}>Channelable Gotchis</Link></p>
         {this.renderAddressForm()}
         {this.renderErrors()}
+        {this.renderFilter()}
         {this.renderLandTable()}
       </div>
     )
