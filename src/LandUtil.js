@@ -56,8 +56,15 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
     let p = parcels.data.data.parcels[i];
     p.district = parseInt(p.district);
     p.size = sizes[parseInt(p.size)];
-    let channelingData = _.filter(parcelChanneling.data.data.parcels, ['id', p.id])[0];
-    p.equippedInstallations = channelingData.equippedInstallations;
+
+    let channelingData = null;
+    if (_.filter(parcelChanneling.data.data.parcels, ['id', p.id]).length > 0) {
+      channelingData = _.filter(parcelChanneling.data.data.parcels, ['id', p.id])[0];
+      p.equippedInstallations = channelingData.equippedInstallations;
+    } else {
+      p.equippedInstallations = [];
+    }
+
     p.hasAltar = false;
     p.altarLevel = 0;
     p.altarCooldown = 0;
@@ -77,7 +84,7 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
     }
     p.lastAltarChannel = 0;
     p.lastAltarChannelRelative = "";
-    if (p.hasAltar) {
+    if (p.hasAltar && channelingData != null) {
       p.lastAltarChannel = parseInt(channelingData.lastChanneledAlchemica);
       if (p.lastAltarChannel != 0) {
         let duration = moment.duration(moment().diff(moment.unix(p.lastAltarChannel)));
