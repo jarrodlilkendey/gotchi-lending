@@ -33,7 +33,8 @@ class BulkLender extends Component {
       sharedTokens: ['0x403E967b044d4Be25170310157cB1A4Bf10bdD0f', '0x44A6e0BE76e1D9620A7F76588e4509fE4fa8E8C8', '0x6a3E7C3c6EF65Ee26975b12293cA1AAD7e1dAeD2', '0x42E5E06EF5b90Fe15F853F59299Fc96259209c5C'],
       isValid: true,
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      filterChanneledGotchis: false,
       // gasPriceGwei: 35
     };
   }
@@ -273,8 +274,14 @@ class BulkLender extends Component {
       let columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'name', headerName: 'Name', width: 240 },
-        { field: 'kinship', headerName: 'Kinship', width: 240 }
+        { field: 'kinship', headerName: 'Kinship', width: 240 },
+        { field: 'channelable', headerName: 'Is Channelable', width: 240 },
       ];
+
+      let filteredRows = this.state.unlentGotchis;
+      if (this.state.filterChanneledGotchis) {
+        filteredRows = _.filter(filteredRows, ['channelable', true]);
+      }
 
       return (
         <div>
@@ -290,7 +297,7 @@ class BulkLender extends Component {
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
               checkboxSelection
-              rows={this.state.unlentGotchis}
+              rows={filteredRows}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -312,12 +319,36 @@ class BulkLender extends Component {
     }
   }
 
+  toggleFilter(event) {
+    this.setState({ filterChanneledGotchis: !this.state.filterChanneledGotchis });
+  }
+
+  renderFilter() {
+    if (this.state.unlentGotchis && this.state.unlentGotchis.length > 0) {
+      return(
+        <div>
+          <div class="row">
+            <div class="col-3">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" name="filterChanneledGotchis" id="filterChanneledGotchis" checked={this.state.filterChanneledGotchis} onChange={(event) => this.toggleFilter(event)} />
+                <label className="form-check-label" for="filterChanneledGotchis">
+                  Filter Channeled Gotchis
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
         <h1>Bulk Lendooor</h1>
         {this.renderLendingParameters()}
         {this.renderErrors()}
+        {this.renderFilter()}
         {this.renderUnlentGotchis()}
       </div>
     )

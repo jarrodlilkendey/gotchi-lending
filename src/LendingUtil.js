@@ -1,6 +1,7 @@
 const axios = require('axios');
 const _ = require('lodash');
 const { ethers } = require('ethers');
+const moment = require('moment');
 
 // export const getUnlentGotchis = async(owner) => {
 //   const ownedGotchis = await getOwnedGotchis(owner);
@@ -40,6 +41,49 @@ export const getUnlentGotchis = async(owner) => {
     }
   });
 
+  let gotchiIds = [];
+  for (let i = 0; i < aavegotchis.length; i++) {
+    gotchiIds.push(aavegotchis[i].id);
+  }
+
+  const gotchiChanneling = await axios.post(
+    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    {
+      query: `{
+        gotchis(
+          first: 1000,
+          where: { id_in: [${gotchiIds.join()}] }
+        ) {
+          id
+          lastChanneledAlchemica
+        }
+      }`
+    }
+  );
+
+  for (let i = 0; i < aavegotchis.length; i++) {
+    let gotchi = aavegotchis[i];
+
+    aavegotchis[i].kinship = parseInt(gotchi.kinship);
+
+    let channelingData = null;
+    if (_.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id]).length > 0) {
+      channelingData = _.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id])[0];
+      aavegotchis[i].lastChanneledUnix = parseInt(channelingData.lastChanneledAlchemica);
+    } else {
+      aavegotchis[i].lastChanneledUnix = 0;
+    }
+
+    aavegotchis[i].channelable = false;
+
+    let lastChanneledDay = Math.floor(gotchi.lastChanneledUnix / (60 * 60 * 24));
+    let currentDay = Math.floor(moment().unix() / (60 * 60 * 24));
+    if (lastChanneledDay != currentDay) {
+      aavegotchis[i].channelable = true;
+    }
+  }
+
+  aavegotchis = _.orderBy(aavegotchis, ['kinship'], ['desc']);
 
   return aavegotchis;
 };
@@ -57,8 +101,6 @@ export const retrieveOwnedRentalAavegotchis = async(owner) => {
       }}`
     }
   );
-
-  console.log('rentalGotchis', rentals);
 
   return rentals.data.data.gotchiLendings;
 };
