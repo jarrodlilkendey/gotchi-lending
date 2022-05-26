@@ -19,7 +19,8 @@ class BulkCancel extends Component {
       selectedGotchis: [],
       uncancelledRentalGotchis: [],
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      filterChanneledGotchis: false,
       // gasPriceGwei: 35,
       // gasLimit: 110000
     };
@@ -98,7 +99,8 @@ class BulkCancel extends Component {
         },
         { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 240 },
         { field: 'timeCreatedRelative', headerName: 'Time Listed', width: 240 },
-        { field: 'whitelistId', headerName: 'Whitelist ID', width: 240 }
+        { field: 'whitelistId', headerName: 'Whitelist ID', width: 240 },
+        { field: 'channelable', headerName: 'Is Channelable', width: 240 },
       ];
 
       let rows = [];
@@ -108,7 +110,10 @@ class BulkCancel extends Component {
         rows.push({ ...g, listing: g.id, id: g.gotchi.id, timeCreatedRelative: timeCreatedRelative, upfrontCostInGHST: parseFloat(ethers.utils.formatEther(g.upfrontCost)) });
       });
 
-      console.log(rows);
+      let filteredRows = rows;
+      if (this.state.filterChanneledGotchis) {
+        filteredRows = _.filter(rows, ['channelable', true]);
+      }
 
       return (
         <div>
@@ -120,7 +125,7 @@ class BulkCancel extends Component {
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
               checkboxSelection
-              rows={rows}
+              rows={filteredRows}
               columns={columns}
               pageSize={100}
               density="compact"
@@ -146,6 +151,29 @@ class BulkCancel extends Component {
     }
   }
 
+  toggleFilter(event) {
+    this.setState({ filterChanneledGotchis: !this.state.filterChanneledGotchis });
+  }
+
+  renderFilter() {
+    if (this.state.uncancelledRentalGotchis && this.state.uncancelledRentalGotchis.length > 0) {
+      return(
+        <div>
+          <div class="row">
+            <div class="col-3">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" name="filterChanneledGotchis" id="filterChanneledGotchis" checked={this.state.filterChanneledGotchis} onChange={(event) => this.toggleFilter(event)} />
+                <label className="form-check-label" for="filterChanneledGotchis">
+                  Filter Channeled Gotchis
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   render() {
     return(
       <div>
@@ -163,6 +191,7 @@ class BulkCancel extends Component {
         </div>
         */}
         {this.renderErrors()}
+        {this.renderFilter()}
         {this.renderCancellableGotchis()}
       </div>
     )
