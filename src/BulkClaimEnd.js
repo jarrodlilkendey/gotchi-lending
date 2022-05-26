@@ -20,7 +20,8 @@ class BulkClaimEnd extends Component {
       claimEndableGotchis: [],
       filterNonEndable: false,
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      filterChanneledGotchis: false,
       // gasPriceGwei: 35,
       // gasLimit: 450000
     };
@@ -107,6 +108,7 @@ class BulkClaimEnd extends Component {
         { field: 'name', headerName: 'Name', width: 180 },
         { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 180 },
         { field: 'endable', headerName: 'Rental Endable', width: 240 },
+        { field: 'channelable', headerName: 'Is Channelable', width: 240 },
         { field: 'timeCreatedRelative', headerName: 'Since Listed', width: 180 },
         { field: 'timeAgreedRelative', headerName: 'Since Agreed', width: 180 },
         { field: 'whitelistId', headerName: 'Whitelist ID', width: 180 },
@@ -147,6 +149,9 @@ class BulkClaimEnd extends Component {
       if (this.state.filterNonEndable) {
         filteredRows = _.filter(rows, ['endable', true]);
       }
+      if (this.state.filterChanneledGotchis) {
+        filteredRows = _.filter(rows, ['channelable', true]);
+      }
 
       return (
         <div>
@@ -174,8 +179,12 @@ class BulkClaimEnd extends Component {
     }
   }
 
-  toggleFilter(event) {
+  toggleNonEndableFilter(event) {
     this.setState({ filterNonEndable: !this.state.filterNonEndable });
+  }
+
+  toggleChanneledFilter(event) {
+    this.setState({ filterChanneledGotchis: !this.state.filterChanneledGotchis });
   }
 
   renderInputs() {
@@ -183,9 +192,17 @@ class BulkClaimEnd extends Component {
       <div className="row">
         <div className="col-3">
           <div className="form-check">
-            <input className="form-check-input" type="checkbox" name="filterNonEndable" id="filterNonEndable" checked={this.state.filterNonEndable} onChange={(event) => this.toggleFilter(event)} />
+            <input className="form-check-input" type="checkbox" name="filterNonEndable" id="filterNonEndable" checked={this.state.filterNonEndable} onChange={(event) => this.toggleNonEndableFilter(event)} />
             <label className="form-check-label" for="filterNonEndable">
               Filter Non Endable Listings
+            </label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" name="filterChanneledGotchis" id="filterChanneledGotchis" checked={this.state.filterChanneledGotchis} onChange={(event) => this.toggleChanneledFilter(event)} />
+            <label className="form-check-label" for="filterChanneledGotchis">
+              Filter Channeled Gotchis
             </label>
           </div>
         </div>
