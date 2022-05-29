@@ -21,7 +21,8 @@ export const getUnlentGotchis = async(owner) => {
           skip: 0,
           where: {
             status: 3,
-            owner: "${owner}"
+            owner: "${owner}",
+            originalOwner: "${owner}"
           }
         ) {
           id
@@ -32,11 +33,14 @@ export const getUnlentGotchis = async(owner) => {
     }
   );
 
-  const rentalGotchis = await retrieveOwnedRentalAavegotchis(owner);
+  const ownedLentGotchis = await retrieveOwnedLentAavegotchis(owner);
+  const ownerBorrowedGotchis = await retrieveOwnerBorrowedAavegotchis(owner);
+  console.log('retrieveOwnedLentAavegotchis', ownedLentGotchis);
+  console.log('retrieveOwnerBorrowedAavegotchis', ownerBorrowedGotchis);
 
   let aavegotchis = [];
   gotchis.data.data.aavegotchis.map((g) => {
-    if (!_.find(rentalGotchis, ['gotchi.id', g.id])) {
+    if (!_.find([...ownedLentGotchis, ...ownerBorrowedGotchis], ['gotchi.id', g.id])) {
       aavegotchis.push(g);
     }
   });
@@ -85,10 +89,29 @@ export const getUnlentGotchis = async(owner) => {
 
   aavegotchis = _.orderBy(aavegotchis, ['kinship'], ['desc']);
 
+  console.log('aavegotchis', aavegotchis);
+
   return aavegotchis;
 };
 
-export const retrieveOwnedRentalAavegotchis = async(owner) => {
+export const retrieveOwnerBorrowedAavegotchis = async(owner) => {
+  const rentals = await axios.post(
+    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
+    {
+      query: `{
+        gotchiLendings(where:{ borrower: "${owner}", completed:false, cancelled:false }) {
+        gotchi {
+          id
+        }
+      }}`
+    }
+  );
+
+  return rentals.data.data.gotchiLendings;
+};
+
+export const retrieveOwnedLentAavegotchis = async(owner) => {
   const rentals = await axios.post(
     'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
