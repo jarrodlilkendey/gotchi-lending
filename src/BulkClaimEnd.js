@@ -147,10 +147,10 @@ class BulkClaimEnd extends Component {
 
       let filteredRows = rows;
       if (this.state.filterNonEndable) {
-        filteredRows = _.filter(rows, ['endable', true]);
+        filteredRows = _.filter(filteredRows, ['endable', true]);
       }
       if (this.state.filterChanneledGotchis) {
-        filteredRows = _.filter(rows, ['channelable', true]);
+        filteredRows = _.filter(filteredRows, ['channelable', true]);
       }
 
       return (
