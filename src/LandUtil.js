@@ -44,7 +44,9 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
           where: { id_in: [${parcelIds.join()}] }
         ) {
           id
-          equippedInstallations
+          equippedInstallations {
+            id
+          }
           lastChanneledAlchemica
         }
       }`
@@ -70,7 +72,7 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
     p.altarCooldown = 0;
     p.isChannelable = false;
     for (let j = 0; j < p.equippedInstallations.length; j++) {
-      let installationId = parseInt(p.equippedInstallations[j]);
+      let installationId = parseInt(p.equippedInstallations[j].id);
       if (installationId >= 1 && installationId <= 19) {
         p.hasAltar = true;
         if (installationId >= 1 && installationId <= 9) {
