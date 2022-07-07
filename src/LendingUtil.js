@@ -22,7 +22,6 @@ export const getUnlentGotchis = async(owner) => {
           where: {
             status: 3,
             owner: "${owner}",
-            originalOwner: "${owner}"
           }
         ) {
           id
@@ -32,6 +31,8 @@ export const getUnlentGotchis = async(owner) => {
       }`
     }
   );
+
+  //             originalOwner: "${owner}"
 
   const ownedLentGotchis = await retrieveOwnedLentAavegotchis(owner);
   const ownerBorrowedGotchis = await retrieveOwnerBorrowedAavegotchis(owner);
@@ -103,6 +104,7 @@ export const retrieveOwnerBorrowedAavegotchis = async(owner) => {
         gotchiLendings(where:{ borrower: "${owner}", completed:false, cancelled:false }) {
         gotchi {
           id
+          name
         }
       }}`
     }
@@ -120,6 +122,7 @@ export const retrieveOwnedLentAavegotchis = async(owner) => {
         gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false }) {
         gotchi {
           id
+          name
         }
       }}`
     }
