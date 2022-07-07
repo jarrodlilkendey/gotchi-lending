@@ -73,7 +73,8 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
     p.isChannelable = false;
     for (let j = 0; j < p.equippedInstallations.length; j++) {
       let installationId = parseInt(p.equippedInstallations[j].id);
-      if (installationId >= 1 && installationId <= 19) {
+      // console.log(p.id, "installationId", installationId);
+      if (installationId >= 1 && installationId < 19) {
         p.hasAltar = true;
         if (installationId >= 1 && installationId <= 9) {
           p.altarLevel = installationId;
