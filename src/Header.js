@@ -47,7 +47,7 @@ export default function Header() {
              </li>
 
              <li className="nav-item">
-              <NavLink to="/bulkend" className={isActive(location, '/bulkend')}>BULK CLAIM ENDOOOR</NavLink>
+              <NavLink to="/bulkclaim" className={isActive(location, '/bulkclaim')}>BULK CLAIMOOOR</NavLink>
              </li>
            </ul>
          </div>

@@ -86,7 +86,7 @@ class App extends Component {
               <Route path="/" element={<Home />} />
               <Route path="/bulklend" element={<BulkLender />} />
               <Route path="/bulkcancel" element={<BulkCancel />} />
-              <Route path="/bulkend" element={<BulkClaimEnd />} />
+              <Route path="/bulkclaim" element={<BulkClaimEnd />} />
               <Route path="/performance" element={<RenterPerformance />} />
               <Route path="/borrower" element={<LookupBorrower />} />
               <Route path="/activity" element={<RecentLendingActivity />} />

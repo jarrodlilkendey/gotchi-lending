@@ -75,6 +75,30 @@ class BulkClaimEnd extends Component {
       });
   }
 
+  async claimRentals() {
+    console.log('claimRentals', this.state.selectedGotchis);
+
+    const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
+    const batchContractWithSigner = this.state.batchContract.connect(this.state.provider.getSigner());
+
+    let bulkClaims = [];
+
+    this.state.selectedGotchis.map((g) => {
+      bulkClaims.push(parseInt(g));
+    });
+
+    console.log('bulkClaims', bulkClaims);
+    batchContractWithSigner.batchClaimGotchiLending(bulkClaims)
+      .then((result) => {
+        console.log('result', result);
+        this.setState({ hasError: false, errorMessage: '' });
+      })
+      .catch((error) => {
+        console.log('error', error);
+        this.setState({ hasError: true, errorMessage: error.message });
+      });
+  }
+
   onIntegerInputChange(event) {
     this.setState({
       [event.target.id]: parseInt(event.target.value)
@@ -159,7 +183,7 @@ class BulkClaimEnd extends Component {
             <h2>Claim Endable Rental Gotchis</h2>
             <p>Note: Sometimes the subgraph provides out of date data on claim endable listings and listings that have already ended are shown in this list.</p>
           </div>
-          <p><button onClick={() => this.claimEndRentals()}>Claim End {this.state.selectedGotchis.length} Gotchis</button></p>
+          <p><button onClick={() => this.claimEndRentals()}>Claim & End {this.state.selectedGotchis.length} Gotchis</button> <button onClick={() => this.claimRentals()}>Claim {this.state.selectedGotchis.length} Gotchis</button></p>
           <div style={{ height: '1080px', width: '100%' }}>
             <DataGrid
               checkboxSelection
@@ -231,7 +255,7 @@ class BulkClaimEnd extends Component {
   render() {
     return(
       <div>
-        <h1>Bulk Claim Endooor</h1>
+        <h1>Bulk Claimooor</h1>
         {this.renderInputs()}
         {this.renderErrors()}
         {this.renderClaimEndableGotchis()}
