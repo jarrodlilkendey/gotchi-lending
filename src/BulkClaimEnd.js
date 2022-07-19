@@ -133,6 +133,7 @@ class BulkClaimEnd extends Component {
         { field: 'upfrontCostInGHST', headerName: 'Upfront GHST', width: 180 },
         { field: 'endable', headerName: 'Rental Endable', width: 240 },
         { field: 'channelable', headerName: 'Is Channelable', width: 240 },
+        { field: 'lastAltarChannelRelative', headerName: 'Since Channeled', width: 240 },
         { field: 'timeCreatedRelative', headerName: 'Since Listed', width: 180 },
         { field: 'timeAgreedRelative', headerName: 'Since Agreed', width: 180 },
         { field: 'whitelistId', headerName: 'Whitelist ID', width: 180 },

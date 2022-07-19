@@ -252,8 +252,11 @@ export const retrieveClaimable = async(owner) => {
     if (_.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id]).length > 0) {
       channelingData = _.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id])[0];
       aavegotchis[i].lastChanneledUnix = parseInt(channelingData.lastChanneledAlchemica);
+      let duration = moment.duration(moment().diff(moment.unix(aavegotchis[i].lastChanneledUnix)));
+      aavegotchis[i].lastAltarChannelRelative = `${parseInt(duration.asHours())} hours and ${parseInt(duration.asMinutes()) % 60} mins ago`;
     } else {
       aavegotchis[i].lastChanneledUnix = 0;
+      aavegotchis[i].lastAltarChannelRelative = "";
     }
 
     aavegotchis[i].channelable = false;
