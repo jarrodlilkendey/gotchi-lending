@@ -25,7 +25,11 @@ const { ethers } = require("ethers");
 const erc1155ABI = require('./erc1155-abi.json');
 
 const accessTokens = {
-  "0x2953399124f0cbb46d2cbacd8a89cf0599974963": ["17553646093580832583136589118225383807805354800301718421539854575162410139662", "17553646093580832583136589118225383807805354800301718421539854577361433395242", "17553646093580832583136589118225383807805354800301718421539854579560456651752"]
+  "0x2953399124f0cbb46d2cbacd8a89cf0599974963": [
+    "17553646093580832583136589118225383807805354800301718421539854575162410139662",
+    "17553646093580832583136589118225383807805354800301718421539854577361433395242",
+    "17553646093580832583136589118225383807805354800301718421539854580659968279528"
+  ]
 };
 
 class App extends Component {
@@ -115,7 +119,7 @@ class App extends Component {
       return (
         <div>
           <p>Hello {this.state.address}, acquire the NFT for access and refresh to proceed.</p>
-          <p>To get access to GotchiLending.com until the end of July purchase this <a style={{color:'white'}} target="_blank" href="https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/17553646093580832583136589118225383807805354800301718421539854579560456651752">access NFT from OpenSea</a>.</p>
+          <p>To get access to GotchiLending.com until the end of August purchase this <a style={{color:'white'}} target="_blank" href="https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/17553646093580832583136589118225383807805354800301718421539854580659968279528">access NFT from OpenSea</a>.</p>
           <p>All profits will be sent to the WAGMI Warriors Guild Treasury.</p>
           {/*<a target="_blank" style={{color:'white'}} href="https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/17553646093580832583136589118225383807805354800301718421539854578460945023076">
             <img src="/access-nft-may-june.png" />

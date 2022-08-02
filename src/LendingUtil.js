@@ -204,7 +204,7 @@ export const retrieveClaimable = async(owner) => {
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
-        gotchiLendings(where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed_not: 0 }) {
+        gotchiLendings(first: 1000, where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed_not: 0 }) {
         gotchi {
           id
           name
@@ -276,7 +276,7 @@ export const listingPerformance = async(listingId) => {
     'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
     {
       query: `{
-        gotchiLendings(where: {id: ${listingId}}) {
+        gotchiLendings(first: 1000, where: {id: ${listingId}}) {
           id
           gotchiId
           lender {
@@ -307,7 +307,7 @@ export const renterPerformance = async(borrower) => {
     'https://api.thegraph.com/subgraphs/name/sudeepb02/gotchi-lending',
     {
       query: `{
-        gotchiLendings(where: {borrower: "${borrower.toLowerCase()}"}) {
+        gotchiLendings(first: 1000, where: {borrower: "${borrower.toLowerCase()}"}) {
           id
           gotchiId
           lender {

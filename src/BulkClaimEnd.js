@@ -190,7 +190,7 @@ class BulkClaimEnd extends Component {
               checkboxSelection
               rows={filteredRows}
               columns={columns}
-              pageSize={100}
+              pageSize={50}
               density="compact"
               onSelectionModelChange={(ids) => { this.setState({ selectedGotchis: ids }) }}
               />
