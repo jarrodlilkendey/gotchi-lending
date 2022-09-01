@@ -51,34 +51,35 @@ class App extends Component {
   }
 
   async hasAccess() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    let access = false;
-    let keys = Object.keys(accessTokens);
-
-    for (let a = 0; a < keys.length; a++) {
-      const contractAddress = keys[a];
-
-      const accessContract = new ethers.Contract(contractAddress, erc1155ABI, provider);
-
-      let addresses = [];
-      let tokenIds = [];
-
-      for (let i = 0; i < accessTokens[keys[a]].length; i++) {
-        addresses.push(window.ethereum.selectedAddress);
-        tokenIds.push(accessTokens[keys[a]][i]);
-      }
-
-      const balances = await accessContract.balanceOfBatch(addresses, tokenIds);
-
-      for (let i = 0; i < balances.length; i++) {
-        const b = balances[i].toNumber();
-        if (b != 0) {
-          access = true;
-        }
-      }
-    }
-
-    return access;
+    return true;
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // let access = false;
+    // let keys = Object.keys(accessTokens);
+    //
+    // for (let a = 0; a < keys.length; a++) {
+    //   const contractAddress = keys[a];
+    //
+    //   const accessContract = new ethers.Contract(contractAddress, erc1155ABI, provider);
+    //
+    //   let addresses = [];
+    //   let tokenIds = [];
+    //
+    //   for (let i = 0; i < accessTokens[keys[a]].length; i++) {
+    //     addresses.push(window.ethereum.selectedAddress);
+    //     tokenIds.push(accessTokens[keys[a]][i]);
+    //   }
+    //
+    //   const balances = await accessContract.balanceOfBatch(addresses, tokenIds);
+    //
+    //   for (let i = 0; i < balances.length; i++) {
+    //     const b = balances[i].toNumber();
+    //     if (b != 0) {
+    //       access = true;
+    //     }
+    //   }
+    // }
+    //
+    // return access;
   }
 
   renderSite() {
@@ -135,8 +136,8 @@ class App extends Component {
         <Header />
         <div className="bodycontent container-lg">
           {this.renderSite()}
-          {this.renderSignIn()}
-          {this.renderNoAccess()}
+          {/*this.renderSignIn()*/}
+          {/*this.renderNoAccess()*/}
         </div>
       </div>
     )
