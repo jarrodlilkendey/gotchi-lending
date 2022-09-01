@@ -53,6 +53,7 @@ export default function Header() {
          </div>
          <div className="navbar-brand navbar-right">
           <div className="row">
+          {/*
             <div className="col">
               <div className="row">
                 <a style={{ color: 'white ', fontSize: '18px'}}>A WAGMI Warriors Property</a>
@@ -61,8 +62,10 @@ export default function Header() {
                 <a style={{ color: 'white ', fontSize: '16px'}} href="https://discord.gg/r5fnNeBRye">Get Support</a>
               </div>
             </div>
+          */}
             <div className="col">
-              <p><a href="https://discord.gg/TNneBnhrM2"><img alt="WAGMI Warriors Guild" src="/smug-wagie.png" width="48px" /></a></p>
+              {/*<p><a href="https://discord.gg/TNneBnhrM2"><img alt="WAGMI Warriors Guild" src="/smug-wagie.png" width="48px" /></a></p>*/}
+              <p><img alt="WAGMI Warriors Guild" src="/smug-wagie.png" width="48px" /></p>
             </div>
           </div>
          </div>
