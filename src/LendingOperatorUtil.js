@@ -145,3 +145,78 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
   
     return aavegotchis;
   };
+
+   export const getClaimableAccountGotchisOperatorStatus = async(owner, lendingOperator, aavegotchiDiamond) => {
+    const rentals = await axios.post(
+      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
+      {
+        query: `{
+          gotchiLendings(first: 1000, where:{ lender: "${owner}", completed:false, cancelled:false, timeAgreed_not: 0 }) {
+          gotchi {
+            id
+            name
+          }
+          completed
+          upfrontCost
+          timeCreated
+          timeAgreed
+          id
+          lastClaimed
+          rentDuration
+          whitelistId
+          borrower
+          period
+        }}`
+      }
+    );
+  
+    let aavegotchis = [];
+    let gotchiIds = [];
+    rentals.data.data.gotchiLendings.map((g) => {
+      aavegotchis.push(g);
+      gotchiIds.push(g.gotchi.id);
+    });
+  
+    const gotchiChanneling = await axios.post(
+      'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+      {
+        query: `{
+          gotchis(
+            first: 1000,
+            where: { id_in: [${gotchiIds.join()}] }
+          ) {
+            id
+            lastChanneledAlchemica
+          }
+        }`
+      }
+    );
+  
+    for (let i = 0; i < aavegotchis.length; i++) {
+      let gotchi = aavegotchis[i].gotchi;
+
+      aavegotchis[i].isLendingOperator = await aavegotchiDiamond.isLendingOperator(owner, lendingOperator, gotchi.id);
+  
+      let channelingData = null;
+      if (_.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id]).length > 0) {
+        channelingData = _.filter(gotchiChanneling.data.data.gotchis, ['id', gotchi.id])[0];
+        aavegotchis[i].lastChanneledUnix = parseInt(channelingData.lastChanneledAlchemica);
+        let duration = moment.duration(moment().diff(moment.unix(aavegotchis[i].lastChanneledUnix)));
+        aavegotchis[i].lastAltarChannelRelative = `${parseInt(duration.asHours())} hours and ${parseInt(duration.asMinutes()) % 60} mins ago`;
+      } else {
+        aavegotchis[i].lastChanneledUnix = 0;
+        aavegotchis[i].lastAltarChannelRelative = "";
+      }
+  
+      aavegotchis[i].channelable = false;
+  
+      let lastChanneledDay = Math.floor(aavegotchis[i].lastChanneledUnix / (60 * 60 * 24));
+      let currentDay = Math.floor(moment().unix() / (60 * 60 * 24));
+      if (lastChanneledDay != currentDay) {
+        aavegotchis[i].channelable = true;
+      }
+    }
+  
+    return aavegotchis;
+  };

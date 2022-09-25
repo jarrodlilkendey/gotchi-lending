@@ -21,6 +21,7 @@ class Home extends Component {
         <h2>Lending Operator</h2>
         <p><Link style={{ color: 'white' }} to={"/lendingoperator/set"}>Set Lending Operator</Link></p>
         <p><Link style={{ color: 'white' }} to={"/lendingoperator/bulklend"}>Bulk Lend as Lending Operator</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/lendingoperator/bulkclaim"}>Bulk Claim as Lending Operator</Link></p>
       </div>
     );
   }

@@ -3,14 +3,6 @@ const _ = require('lodash');
 const { ethers } = require('ethers');
 const moment = require('moment');
 
-// export const getUnlentGotchis = async(owner) => {
-//   const ownedGotchis = await getOwnedGotchis(owner);
-//   const lentGotchis = await retrieveOwnedRentalAavegotchis(owner);
-//
-//   console.log(ownedGotchis);
-//   console.log(lentGotchis);
-// }
-
 export const getUnlentGotchis = async(owner) => {
   const gotchis = await axios.post(
     'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',

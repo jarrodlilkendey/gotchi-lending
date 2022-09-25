@@ -17,6 +17,7 @@ import ChannelableGotchis from './ChannelableGotchis';
 
 import SetLendingOperator from './SetLendingOperator';
 import LendingOperatorBulkLender from './LendingOperatorBulkLender';
+import LendingOperatorBulkClaimEnd from './LendingOperatorBulkClaimEnd';
 
 import Header from './Header';
 import Home from './Home';
@@ -101,6 +102,7 @@ class App extends Component {
               <Route path="/gotchis" element={<ChannelableGotchis />} />
               <Route path="/lendingoperator/set" element={<SetLendingOperator />} />
               <Route path="/lendingoperator/bulklend" element={<LendingOperatorBulkLender />} />
+              <Route path="/lendingoperator/bulkclaim" element={<LendingOperatorBulkClaimEnd />} />
               {/*Route path="/whitelist" element={<WhitelistManagement />} />*/}
               {/*<Route path="/autolender" element={<AutoLender />} />*/}
             </Routes>
