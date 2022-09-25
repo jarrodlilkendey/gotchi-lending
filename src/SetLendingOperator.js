@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { getUnlentGotchis } from './LendingUtil';
-import { getAccountGotchisOperatorStatus } from './GotchisUtil';
+import { getAccountGotchisOperatorStatus } from './LendingOperatorUtil';
 
 const { ethers } = require("ethers");
 const _ = require("lodash");
@@ -18,6 +17,7 @@ class SetLendingOperator extends Component {
     super(props);
 
     this.state = {
+      isLoading: false,
       gotchiOwnerAddress: '',
       lendingOperatorAddress: '',
       filterLendingOperatorGotchis: false,
@@ -63,7 +63,10 @@ class SetLendingOperator extends Component {
     const diamondContractWithSigner = this.state.diamondContract.connect(this.state.provider.getSigner());
     
     let lendingOperator = this.state.lendingOperatorAddress;
-    let lendingOperatorStatus = this.state.lendingOperatorStatus;
+    let lendingOperatorStatus = false;
+    if (this.state.lendingOperatorStatus == "true") {
+      lendingOperatorStatus = true;
+    }
     let lendingOperatorConfig = [];
 
     this.state.selectedGotchis.map((a) => {
@@ -85,10 +88,11 @@ class SetLendingOperator extends Component {
 
   retrieveGotchisLendingOperatorStatus() {
     console.log('retrieveGotchisLendingOperatorStatus', this.state.gotchiOwnerAddress, this.state.lendingOperatorAddress, this.state.diamondContract);
+    this.setState({ isLoading: true });
     getAccountGotchisOperatorStatus(this.state.gotchiOwnerAddress, this.state.lendingOperatorAddress, this.state.diamondContract)
       .then((accountGotchis) => {
         console.log('accountGotchis', accountGotchis, accountGotchis.length);
-        this.setState({ accountGotchis });
+        this.setState({ accountGotchis, isLoading: false });
       })
   }
 
@@ -115,6 +119,9 @@ class SetLendingOperator extends Component {
               <br />
               <br />
               <button onClick={() => this.retrieveGotchisLendingOperatorStatus()}>Load Gotchis</button>
+              {this.state.isLoading &&
+                <p>Loading...</p>
+              }
             </div>
           </div>
       </div>

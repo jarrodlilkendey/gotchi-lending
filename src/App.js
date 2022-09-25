@@ -12,10 +12,11 @@ import RenterPerformance from './RenterPerformance';
 import LookupBorrower from './LookupBorrower';
 import RecentLendingActivity from './RecentLendingActivity';
 import MyLendingRevenue from './MyLendingRevenue';
-// import WhitelistManagement from './WhitelistManagement';
 import ChannelableLand from './ChannelableLand';
 import ChannelableGotchis from './ChannelableGotchis';
-// import AutoLender from './AutoLender';
+
+import SetLendingOperator from './SetLendingOperator';
+import LendingOperatorBulkLender from './LendingOperatorBulkLender';
 
 import Header from './Header';
 import Home from './Home';
@@ -98,6 +99,8 @@ class App extends Component {
               <Route path="/revenue" element={<MyLendingRevenue />} />
               <Route path="/land" element={<ChannelableLand />} />
               <Route path="/gotchis" element={<ChannelableGotchis />} />
+              <Route path="/lendingoperator/set" element={<SetLendingOperator />} />
+              <Route path="/lendingoperator/bulklend" element={<LendingOperatorBulkLender />} />
               {/*Route path="/whitelist" element={<WhitelistManagement />} />*/}
               {/*<Route path="/autolender" element={<AutoLender />} />*/}
             </Routes>

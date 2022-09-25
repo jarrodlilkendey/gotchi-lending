@@ -18,6 +18,9 @@ class Home extends Component {
         <h2>Quality of Life</h2>
         <p><Link style={{ color: 'white' }} to={"land"}>Channelable Land</Link></p>
         <p><Link style={{ color: 'white' }} to={"gotchis"}>Channelable Gotchis</Link></p>
+        <h2>Lending Operator</h2>
+        <p><Link style={{ color: 'white' }} to={"/lendingoperator/set"}>Set Lending Operator</Link></p>
+        <p><Link style={{ color: 'white' }} to={"/lendingoperator/bulklend"}>Bulk Lend as Lending Operator</Link></p>
       </div>
     );
   }
