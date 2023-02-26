@@ -1,3 +1,5 @@
+const config = require('./Config');
+
 const axios = require('axios');
 const _ = require('lodash');
 const { ethers } = require('ethers');
@@ -5,7 +7,7 @@ const moment = require('moment');
 
 export const getUnlentGotchis = async(owner) => {
   const gotchis = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
+    config.AAVEGOTCHI_CORE_SUBGRAPH_URL,
     {
       query: `{
         aavegotchis(
@@ -19,6 +21,7 @@ export const getUnlentGotchis = async(owner) => {
           id
           name
           kinship
+          locked
         }
       }`
     }
@@ -44,7 +47,7 @@ export const getUnlentGotchis = async(owner) => {
   }
 
   const gotchiChanneling = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    config.GOTCHIVERSE_SUBGRAPH_URL,
     {
       query: `{
         gotchis(
@@ -89,7 +92,7 @@ export const getUnlentGotchis = async(owner) => {
 
 export const retrieveOwnerBorrowedAavegotchis = async(owner) => {
   const rentals = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
@@ -107,7 +110,7 @@ export const retrieveOwnerBorrowedAavegotchis = async(owner) => {
 
 export const retrieveOwnedLentAavegotchis = async(owner) => {
   const rentals = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
@@ -125,7 +128,7 @@ export const retrieveOwnedLentAavegotchis = async(owner) => {
 
 export const retrieveOwnedUncancelledRentalAavegotchis = async(owner) => {
   const rentals = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
@@ -153,7 +156,7 @@ export const retrieveOwnedUncancelledRentalAavegotchis = async(owner) => {
   });
 
   const gotchiChanneling = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    config.GOTCHIVERSE_SUBGRAPH_URL,
     {
       query: `{
         gotchis(
@@ -192,7 +195,7 @@ export const retrieveOwnedUncancelledRentalAavegotchis = async(owner) => {
 
 export const retrieveClaimable = async(owner) => {
   const rentals = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+    config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
     // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
     {
       query: `{
@@ -223,7 +226,7 @@ export const retrieveClaimable = async(owner) => {
   });
 
   const gotchiChanneling = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    config.GOTCHIVERSE_SUBGRAPH_URL,
     {
       query: `{
         gotchis(
@@ -461,7 +464,7 @@ export const getFreeLendingActivity = async() => {
 
   for (var i = 0; i < 5000; i+=1000) {
     const rentals = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
       {
         query: getFreeLendingActivityQuery(i)
       }
@@ -480,7 +483,7 @@ export const getUpfrontLendingActivity = async() => {
 
   for (var i = 0; i < 5000; i+=1000) {
     const rentals = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
       {
         query: getUpfrontLendingActivityQuery(i)
       }

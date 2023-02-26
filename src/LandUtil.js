@@ -1,3 +1,5 @@
+const config = require('./Config');
+
 const axios = require('axios');
 const _ = require('lodash');
 const { ethers } = require('ethers');
@@ -10,7 +12,7 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
   const aaltarCooldowns = [24, 18, 12, 8, 6, 4, 3, 2, 1];
 
   const parcels = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
+    config.AAVEGOTCHI_CORE_SUBGRAPH_URL,
     {
       query: `{
         parcels(
@@ -36,7 +38,7 @@ export const getMyLand = async(owner, installationDiamondContract, realmDiamondC
   }
 
   const parcelChanneling = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    config.GOTCHIVERSE_SUBGRAPH_URL,
     {
       query: `{
         parcels(

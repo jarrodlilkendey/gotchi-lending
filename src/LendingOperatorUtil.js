@@ -1,5 +1,7 @@
 import { retrieveOwnedLentAavegotchis, retrieveOwnerBorrowedAavegotchis } from './LendingUtil';
 
+const config = require('./Config');
+
 const axios = require('axios');
 const _ = require('lodash');
 const { ethers } = require('ethers');
@@ -22,14 +24,14 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
     }`;
   
     const unlentGotchis = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
+      config.AAVEGOTCHI_CORE_SUBGRAPH_URL,
       {
         query: unlentGotchisQuery
       }
     );
   
     const lentGotchis = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
       {
         query: `{
           gotchiLendings(where:{ lender: "${owner}", timeAgreed_gt: 0, completed:false, cancelled:false }) {
@@ -64,7 +66,7 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
     owner = owner.toLowerCase();
     
     const gotchis = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
+      config.AAVEGOTCHI_CORE_SUBGRAPH_URL,
       {
         query: `{
           aavegotchis(
@@ -101,7 +103,7 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
     }
   
     const gotchiChanneling = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+      config.GOTCHIVERSE_SUBGRAPH_URL,
       {
         query: `{
           gotchis(
@@ -148,7 +150,7 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
 
    export const getClaimableAccountGotchisOperatorStatus = async(owner, lendingOperator, aavegotchiDiamond) => {
     const rentals = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/froid1911/aavegotchi-lending',
+      config.AAVEGOTCHI_LENDING_SUBGRAPH_URL,
       // 'https://static.138.182.90.157.clients.your-server.de/subgraphs/name/aavegotchi/aavegotchi-core-matic-lending-two',
       {
         query: `{
@@ -179,7 +181,7 @@ export const getAccountGotchisOperatorStatus = async(owner, lendingOperator, aav
     });
   
     const gotchiChanneling = await axios.post(
-      'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+      config.GOTCHIVERSE_SUBGRAPH_URL,
       {
         query: `{
           gotchis(

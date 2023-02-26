@@ -1,3 +1,5 @@
+const config = require('./Config');
+
 const axios = require('axios');
 const _ = require('lodash');
 const { ethers } = require('ethers');
@@ -20,7 +22,7 @@ export const getMyGotchis = async(owner, installationDiamondContract, realmDiamo
   }`;
 
   const unlentGotchis = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/aavegotchi-core-matic',
+    config.AAVEGOTCHI_CORE_SUBGRAPH_URL,
     {
       query: query
     }
@@ -32,7 +34,7 @@ export const getMyGotchis = async(owner, installationDiamondContract, realmDiamo
   }
 
   const gotchiChanneling = await axios.post(
-    'https://api.thegraph.com/subgraphs/name/aavegotchi/gotchiverse-matic',
+    config.GOTCHIVERSE_SUBGRAPH_URL,
     {
       query: `{
         gotchis(

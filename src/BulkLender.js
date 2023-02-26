@@ -276,6 +276,7 @@ class BulkLender extends Component {
         { field: 'name', headerName: 'Name', width: 240 },
         { field: 'kinship', headerName: 'Kinship', width: 240 },
         { field: 'channelable', headerName: 'Is Channelable', width: 240 },
+        { field: 'locked', headerName: 'Is Locked', width: 240 },
       ];
 
       let filteredRows = this.state.unlentGotchis;
